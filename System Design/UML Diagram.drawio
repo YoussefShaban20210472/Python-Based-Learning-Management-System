@@ -1,9 +1,261 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="5_29MOvxNFv3EZwkigq_">
-    <mxGraphModel dx="743" dy="501" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3558" dy="1253" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-99" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-890" y="240" width="1550" height="1310" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-6" value="UserModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="280" width="440" height="182" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-7" value="+ AddUser(user:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-6">
+          <mxGeometry y="26" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-10" value="+ GetUser(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-6">
+          <mxGeometry y="52" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-11" value="+ GetUsers():object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-6">
+          <mxGeometry y="78" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-12" value="+ FindUserByUsernameAndPassword(username:string,password:string):int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-6">
+          <mxGeometry y="104" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-13" value="+ UpdateUser(id:int, user:object):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-6">
+          <mxGeometry y="130" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-14" value="+ DeleteUser(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-6">
+          <mxGeometry y="156" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-15" value="CourseModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="280" width="440" height="181" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-16" value="+ AddCourse(course:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-15">
+          <mxGeometry y="26" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-17" value="+ GetCourse(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-15">
+          <mxGeometry y="52" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-18" value="+ GetCourses():object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-15">
+          <mxGeometry y="78" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-20" value="+ UpdateCourse(id:int, course:object):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-15">
+          <mxGeometry y="104" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-21" value="+ DeleteCourse(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-15">
+          <mxGeometry y="130" width="440" height="51" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-22" value="EnrollmentModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="280" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-23" value="+ AddEnrollment(courseId:int,userId:int):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-22">
+          <mxGeometry y="26" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-24" value="+ GetEnrollment(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-22">
+          <mxGeometry y="52" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-25" value="+ GetEnrollments(courseId:int):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-22">
+          <mxGeometry y="78" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-26" value="+ ConfirmEnrollment(id:int,confirm:string):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-22">
+          <mxGeometry y="104" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-27" value="+ DeleteEnrollment(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-22">
+          <mxGeometry y="130" width="440" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-46" value="AssignmentSubmissionModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="542" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-47" value="+ Add&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(assignment:int, submission:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-46">
+          <mxGeometry y="26" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-48" value="+ Get&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-46">
+          <mxGeometry y="52" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-49" value="+ Get&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(assignmentId:int):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-46">
+          <mxGeometry y="78" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-51" value="+ Delete&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-46">
+          <mxGeometry y="104" width="440" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-52" value="GradeAssignmentSubmissionModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="542" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-53" value="+ Grade&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(assignSubmission:int, grade:float):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-52">
+          <mxGeometry y="26" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-54" value="+ GetGraded&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-52">
+          <mxGeometry y="52" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-55" value="+ Get&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(assignmentId:int):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-52">
+          <mxGeometry y="78" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-57" value="+ DeleteGraded&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-52">
+          <mxGeometry y="104" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-56" value="+ UpdateGraded&lt;span style=&quot;text-align: center;&quot;&gt;AssignmentSubmission&lt;/span&gt;(assignSubmission:int, grade:float):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-52">
+          <mxGeometry y="130" width="440" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-58" value="MediaFileModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="542" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-59" value="+ AddMediaFile(courseId:int, mediaFile:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-58">
+          <mxGeometry y="26" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-60" value="+ GetMediaFile(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-58">
+          <mxGeometry y="52" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-61" value="+ GetMediaFiles(courseId:int):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-58">
+          <mxGeometry y="78" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-63" value="+ DeleteMediaFile(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-58">
+          <mxGeometry y="104" width="440" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-84" value="BankModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="812" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-85" value="+ AddQuestion(courseId:int, question:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-84">
+          <mxGeometry y="26" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-86" value="+ GetBank(courseId:int):object[]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-84">
+          <mxGeometry y="52" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-87" value="+ UpdateQuestion(questionId:int,question:object):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-84">
+          <mxGeometry y="78" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-88" value="+ DeleteQuestion(questionId:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-84">
+          <mxGeometry y="104" width="440" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-89" value="QuizBankModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-339" y="802" width="440" height="190" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-90" value="+ AddQuizBank(courseId:int, quiz:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-89">
+          <mxGeometry y="26" width="440" height="164" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-94" value="NotificationModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="802" width="440" height="190" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-95" value="+ AddNotification(courseId:int,userId:int, message:string):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="EJ09QNtR2-sTsQ32JC37-94">
+          <mxGeometry y="26" width="440" height="164" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-28" value="LessonModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1072" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-34" value="AttendanceModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="1072" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-40" value="AssignmentModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1072" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-64" value="ProgressModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="1332" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-72" value="QuizModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1332" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-78" value="QuizAttemptGradeModel" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1332" width="440" height="180" as="geometry">
+            <mxRectangle x="210" y="240" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-29" value="+ AddLesson(courseId:int, lesson:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1098" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-30" value="+ GetLesson(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1124" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-31" value="+ GetLessons(courseId:int):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1150" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-32" value="+ UpdateLesson(id:int,lesson:object):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1176" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-33" value="+ DeleteLesson(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1202" width="440" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-35" value="+ AddAttendance(lessonId:int,userId:int):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="1098" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-36" value="+ GetAttendance(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="1124" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-37" value="+ GetAttendances(courseId:int,lessons:int[]):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="1150" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-41" value="+ AddAssignment(courseId:int, assignment:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1098" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-42" value="+ GetAssignment(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1124" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-43" value="+ GetAssignments(courseId:int):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1150" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-44" value="+ UpdateAssignment(id:int,assignment:object):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1176" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-45" value="+ DeleteAssignment(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1202" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-65" value="+ GetStudentProgress(courseId:int, studentId:int):object&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="1358" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-66" value="+ GetCourseProgress(courseId:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="1384" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-73" value="+ AddQuiz(courseId:int, quiz:object):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1358" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-74" value="+ GetQuiz(id:int):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1384" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-75" value="+ GetQuizzes(courseId:int):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1410" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-76" value="+ UpdateQuiz(id:int,quiz:object):object" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1436" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-77" value="+ DeleteQuiz(id:int):bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1462" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-79" value="+ GradeQuiz&lt;span style=&quot;text-align: center;&quot;&gt;Attempt&lt;/span&gt;(quizId:int, studentId:int, grade:float):bool&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1358" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-80" value="+ GetGradeQuiz&lt;span style=&quot;text-align: center;&quot;&gt;Attempt&lt;/span&gt;(quizId:int,studentId:int):float" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1384" width="440" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="EJ09QNtR2-sTsQ32JC37-81" value="+ GetGradeQuiz&lt;span style=&quot;text-align: center;&quot;&gt;Attempt&lt;/span&gt;s(quizId:int):object[]&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;container=0;" vertex="1" parent="1">
+          <mxGeometry x="-860" y="1410" width="440" height="26" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
