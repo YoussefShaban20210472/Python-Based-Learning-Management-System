@@ -407,4 +407,4 @@ begin
 
 end
 else
-select 'Flask_Learning_Management_System database is already existed' as ERROR
+	select 'Flask_Learning_Management_System database is already existed' as ERROR
