@@ -26,10 +26,12 @@ begin
 				constraint user_constraint_address_not_empty check(len(address) >4),
 				constraint user_constraint_password_not_empty check(len(password) >8),
 				constraint user_constraint_email_not_empty check(len(email) >4),
+				constraint user_constraint_email_unique unique(email),
 				constraint user_constraint_phone_number_not_empty check(len(phone_number) >6),
 				constraint user_constraint_birth_date_valid_age check( datediff(year, birth_date, getdate()) between 18 and 80),
 				constraint user_constraint_gender_valid_value check(gender in ('MALE','FEMALE')),
-				constraint user_constraint_role_valid_value check(role in ('ADMIN','STUDENT','INSTRUCTOR'))
+				constraint user_constraint_role_valid_value check(role in ('ADMIN','STUDENT','INSTRUCTOR')),
+		
 			);
 		
 			-- Course Table
