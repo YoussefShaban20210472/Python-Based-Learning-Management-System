@@ -2,7 +2,7 @@ from flask import Blueprint
 
 course_blueprint = Blueprint('course', __name__)
 
-def demo():
+def demo(id =0):
     return 'demo'
 
 
