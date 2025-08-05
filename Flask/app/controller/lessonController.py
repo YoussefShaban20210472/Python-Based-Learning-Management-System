@@ -2,7 +2,7 @@ from flask import Blueprint
 
 lesson_blueprint = Blueprint('lesson', __name__)
 
-def demo():
+def demo(course_id=0,id=0):
     return 'demo'
 
 
@@ -21,6 +21,8 @@ lesson_blueprint.route('/all',methods=['GET'])(demo)
 #   Update lesson by id
 lesson_blueprint.route('/<int:id>',methods=['PUT'])(demo)
 
+#   Delete lesson by id
+lesson_blueprint.route('/<int:id>',methods=['DELETE'])(demo)
 
 
 # Student role
