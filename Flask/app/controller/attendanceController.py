@@ -2,7 +2,7 @@ from flask import Blueprint
 
 attendance_blueprint = Blueprint('attendance', __name__)
 
-def demo():
+def demo(course_id=0, lesson_id=0, id=0):
     return 'demo'
 
 
