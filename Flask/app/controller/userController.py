@@ -2,8 +2,8 @@ from flask import Blueprint
 
 user_blueprint = Blueprint('user', __name__)
 
-def demo():
-    return 'demo'
+def demo(id=10):
+    return 'demo',200
 
 
 # Admin role
@@ -24,13 +24,13 @@ user_blueprint.route('/<int:id>',methods=['DELETE'])(demo)
 
 # any User role
 
-#   Get user using authenticated user
+#   Get user by using authenticated user
 user_blueprint.route('/',methods=['GET'])(demo)
 
-#   Update user using authenticated user
+#   Update user by using authenticated user
 user_blueprint.route('/',methods=['PUT'])(demo)
 
-#   Delete user using authenticated user
+#   Delete user by using authenticated user
 user_blueprint.route('/',methods=['DELETE'])(demo)
 
 
