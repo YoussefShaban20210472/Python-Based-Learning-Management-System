@@ -2,7 +2,7 @@ from flask import Blueprint
 
 enrollment_blueprint = Blueprint('enrollment', __name__)
 
-def demo():
+def demo(course_id=0, id=0):
     return 'demo'
 
 
@@ -25,8 +25,8 @@ enrollment_blueprint.route('/<int:id>',methods=['PUT'])(demo)
 enrollment_blueprint.route('/',methods=['POST'])(demo)
 
 #   Get enrollment by using authenticated student
-enrollment_blueprint.route('/<int:id>',methods=['GET'])(demo)
+enrollment_blueprint.route('/',methods=['GET'])(demo)
 
 #   Delete enrollment by using authenticated student
-enrollment_blueprint.route('/<int:id>',methods=['DELETE'])(demo)
+enrollment_blueprint.route('/',methods=['DELETE'])(demo)
 
