@@ -45,7 +45,6 @@ begin
 				language varchar(50) not null,
 				start_date datetime not null ,
 				end_date datetime not null ,
-				duration int not null ,
 
 				status as (
 					case 
@@ -74,8 +73,7 @@ begin
 
 				constraint course_constraint_duration_valid_value check
 				( 
-					datediff(day, start_date, end_date) + 1 = duration and 
-					duration >= 3
+					datediff(day, start_date, end_date) + 1 >= 3
 				),
 			);
 		
