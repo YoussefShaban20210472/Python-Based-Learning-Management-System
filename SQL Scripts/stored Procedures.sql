@@ -2711,3 +2711,353 @@ begin
 	on cmf.course_id = @course_id and mf.id = cmf.media_file_id
 end
 
+go
+
+create proc add_submission
+@actor_id int,
+@student_id int,
+@assignment_id int,
+@path varchar(500) not null,
+@name varchar(100) not null,
+@extension varchar(100) not null,
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='STUDENT',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	declare 
+		@user_role varchar(10),
+		@lesson_otp varchar(500),
+		@course_id int
+		
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+	if @user_role ='ADMIN'
+		begin
+			exec is_existed_and_authorized
+			@id=@student_id,
+			@role='STUDENT',
+			@exist_error_message='Student id is not found',
+			@role_error_message='Student id is not student ',
+			@error=@error output
+			if @error is not null
+				return 
+		end
+
+
+	if @actor_id != @student_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+
+	
+	if not exists(select id from Flask_Learning_Management_System.dbo.[assignment] where id = @assignment_id)
+	begin
+		set @error = 'Assignment Not Found'
+		return
+	end
+
+	select 
+		@course_id= cour.id
+	from 
+	Flask_Learning_Management_System.dbo.[course] as cour
+	inner join
+	Flask_Learning_Management_System.dbo.[assignment] as assig
+	 on assig.course_id = cour.id and assig.id = @assignment_id
+
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[enrollment] where student_id = @student_id and course_id = @course_id)
+	begin
+		if @user_role = 'STUDENT'
+			set @error = 'You are not authorized to perform this action.'
+		else
+			set @error = 'Student is not enrolled to the course'
+		return
+	end
+
+	exec validate_media_file
+	@path = @path,
+	@name = @name ,
+	@extension = @extension ,
+	@error = @error  output	
+	if @error is not null
+		return 
+
+	-- Insert New course media file
+	insert into Flask_Learning_Management_System.dbo.[media_file]
+	(
+			path,
+			name,
+			extension
+	)
+	values
+	(
+			@path,
+			@name,
+			@extension
+	)
+
+	declare @media_file_id int,
+			@submission_id int
+
+	set @media_file_id= cast(SCOPE_IDENTITY() as int)
+
+
+
+	 select @submission_id = submission_id 
+	 from Flask_Learning_Management_System.dbo.[submission_assignment] 
+	 where student_id = @student_id and @assignment_id = assignment_id
+
+	 if @submission_id is null
+		 begin
+				insert into Flask_Learning_Management_System.dbo.[submission] default values
+				set @media_file_id= cast(SCOPE_IDENTITY() as int)
+
+				insert into Flask_Learning_Management_System.dbo.[submission_assignment]
+				(
+					student_id  ,
+					assignment_id  ,
+					submission_id
+				)
+				values
+				(
+					@student_id  ,
+					@assignment_id  ,
+					@submission_id
+				)
+		 end
+
+
+	insert into Flask_Learning_Management_System.dbo.[submission_media_file]
+	(
+			submission_id,
+			media_file_id
+	)
+	values
+	(
+			@submission_id,
+			@media_file_id
+	)
+
+end
+
+
+
+go
+
+create proc delete_submission
+@actor_id int,
+@submission_id int,
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='STUDENT',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[submission_assignment] where submission_id = @submission_id)
+		begin
+			set @error = 'Submission Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@student_id int,
+		@course_id int
+		
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+	 select @student_id = student_id 
+	 from Flask_Learning_Management_System.dbo.[submission_assignment] 
+	 where  @submission_id = submission_id
+
+
+
+	if @actor_id != @student_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+	delete from Flask_Learning_Management_System.dbo.[submission_assignment] 
+	where @submission_id = submission_id
+
+	while 1=1
+	begin 
+
+		if not exists(select * from Flask_Learning_Management_System.dbo.[submission_media_file] where submission_id = @submission_id)
+			break
+
+
+		declare  @media_file_id int
+
+		select top(1) @media_file_id = media_file_id from Flask_Learning_Management_System.dbo.[submission_media_file]
+		where submission_id = @submission_id
+
+		delete from Flask_Learning_Management_System.dbo.[submission_media_file]
+		where media_file_id = @media_file_id
+
+		delete from Flask_Learning_Management_System.dbo.[media_file]
+		where id = @media_file_id
+	end
+
+	delete from Flask_Learning_Management_System.dbo.[submission] 
+	where @submission_id = id
+end
+
+
+go
+
+
+create proc get_assignment_submission
+@actor_id int,
+@submission_id int ,
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='ALL',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[submission_assignment] where submission_id = @submission_id)
+		begin
+			set @error = 'Submission Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int,
+		@course_id int,
+		@student_id int
+
+
+	 select @student_id = student_id 
+	 from Flask_Learning_Management_System.dbo.[submission_assignment] 
+	 where  @submission_id = submission_id
+		
+
+	select 
+		@instructor_id= instructor_id,
+		@course_id= course_id
+	from 
+	Flask_Learning_Management_System.dbo.[submission_assignment] as sa
+	inner join
+	Flask_Learning_Management_System.dbo.[assignment] as assig
+	on sa.submission_id = @submission_id and assig.id = sa.assignment_id
+	inner join
+	Flask_Learning_Management_System.dbo.[course] as cour
+	 on cour.id = assig.course_id
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+	if @actor_id != @instructor_id and  @actor_id != @student_id  and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+		
+	-- get assignment submission media files
+	
+	select mf.*, s.submission_date from
+	Flask_Learning_Management_System.dbo.[submission_media_file] as smf
+	inner join
+	Flask_Learning_Management_System.dbo.[media_file] as mf
+	on smf.submission_id = @submission_id and mf.id = smf.media_file_id
+	inner join
+	Flask_Learning_Management_System.dbo.[submission] as s
+	on s.id = @submission_id
+
+end
+
+
+go
+
+
+create proc get_assignment_submissions
+@actor_id int,
+@course_id int,
+@error varchar(100) output
+as
+begin
+exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[course] where id = @course_id)
+		begin
+			set @error = 'Course Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[course]
+	 where @course_id = id
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+	-- get assignment submission media files
+	
+	select sa.*, s.submission_date from
+	Flask_Learning_Management_System.dbo.[assignment] as assig
+	inner join
+	Flask_Learning_Management_System.dbo.[submission_assignment] as sa
+	on assig.id = sa.assignment_id and assig.course_id = @course_id
+	inner join
+	Flask_Learning_Management_System.dbo.[submission] as s
+	on s.id = sa.submission_id
+
+end
