@@ -393,6 +393,7 @@ begin
 				student_id int not null ,
 				assignment_id int not null ,
 				submission_id int not null,
+				score float,
 			-- Constraints
 				constraint submission_assignment_constraint_student_id_and_assignment_id_primary_key primary key(student_id,assignment_id),
 				constraint submission_assignment_constraint_student_id_foreign_key foreign key(student_id) references Flask_Learning_Management_System.dbo.[user](id),
@@ -400,6 +401,7 @@ begin
 				constraint submission_assignment_constraint_submission_id_foreign_key foreign key(submission_id) references Flask_Learning_Management_System.dbo.[submission](id),
 				constraint submission_assignment_constraint_student_id_and_assignment_id_unique unique(student_id,assignment_id),
 				constraint submission_assignment_constraint_submission_id_unique unique(submission_id),
+				constraint submission_assignment_constraint_score_valid_value check(score > 0.0 and score < 1000),
 			);
 		select 'Created Tables Successfully!';
 		commit
