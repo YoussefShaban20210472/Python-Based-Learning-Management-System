@@ -196,6 +196,10 @@ begin
 					end_date >= start_date and
 					end_date <= dateadd(year, 1, start_date)
 				),
+				constraint lesson_constraint_duration_valid_value check
+				( 
+					datediff(minute, start_date, end_date) + 1 >= 15
+				),
 			);
 		
 			-- Attendance Table
