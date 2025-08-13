@@ -545,6 +545,66 @@ begin
 end;
 
 go
+
+
+create proc validate_question
+@title varchar(100) ,
+@correct_answer varchar(100) ,
+@grade float , 
+@type varchar(20),
+@allowed_null int = 0,
+@error varchar(100) output
+as
+begin
+	-- Title Validation
+	exec is_valid_string 
+		@attribute_name='Title',
+		@value = @title,
+		@max_length= 100 ,
+		@allowed_null = @allowed_null,
+		@error = @error output
+	if	@error is not null
+		return
+
+	-- Correct Answer Validation
+	exec is_valid_string 
+		@attribute_name='Correct Answer',
+		@value = @correct_answer,
+		@max_length= 100 ,
+		@allowed_null = @allowed_null,
+		@error = @error output
+	if	@error is not null
+		return
+
+	-- Type Validation
+	exec is_valid_string 
+		@attribute_name='Type',
+		@value = @type,
+		@max_length= 20 ,
+		@allowed_null = @allowed_null,
+		@error = @error output
+	if	@error is not null
+		return
+
+	if @type not in ('MCQ','TRUE_FALSE','SHORT_ANSWER')
+		begin
+			set @error = 'Type is not valid' 
+			return 
+		end 
+	-- Grade Validation
+	if @grade is null
+		begin
+			set @error = 'Grade is required'
+			return
+		end
+	if @grade < 0.0 or @grade > 1000
+		begin
+			set @error = 'Grade must be between 0 and 1000 values.'
+			return
+		end
+end;
+
+go
 create proc add_user
 @first_name varchar(30) ,
 @last_name varchar(30) ,
@@ -3898,4 +3958,1110 @@ begin
 	begin
 		select * from Flask_Learning_Management_System.dbo.[assignment] where course_id = @course_id
 	end
+end
+
+
+go
+
+create proc add_quiz_question
+@actor_id int,
+@quiz_id int ,
+@title varchar(100) ,
+@correct_answer varchar(100) ,
+@grade float , 
+@type varchar(20),
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[quiz] where id = @quiz_id)
+		begin
+			set @error = 'Quiz Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[course] as cour
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	 on quiz.course_id = cour.id and quiz.id = @quiz_id
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+
+	exec validate_question
+		@title = @title,
+		@correct_answer=@correct_answer,
+		@grade = @grade,
+		@type = @type,
+		@error=@error output
+		if @error is not null
+			return
+	insert into Flask_Learning_Management_System.dbo.[question]
+	(
+		title ,
+		correct_answer,
+		grade , 
+		type
+	)
+	values
+	(
+		@title ,
+		@correct_answer,
+		@grade , 
+		@type
+	)
+
+	insert into Flask_Learning_Management_System.dbo.[quiz_question]
+	(
+	question_id,
+	quiz_id
+	)
+	values
+	(
+	cast(SCOPE_IDENTITY() as int),
+	@quiz_id
+	)
+	
+end
+
+go
+
+create proc update_quiz_question
+@actor_id int,
+@question_id int ,
+@title varchar(100) ,
+@correct_answer varchar(100) ,
+@grade float , 
+@type varchar(20),
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[question] where id = @question_id)
+		begin
+			set @error = 'Question Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[quiz_question] as qq
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	on quiz.id = qq.quiz_id
+	inner join
+	Flask_Learning_Management_System.dbo.[course] as cour
+	 on cour.id = quiz.course_id
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+	-- Declare old values attributes
+	declare		
+		@old_title varchar(100) ,
+		@old_correct_answer varchar(100) ,
+		@old_grade float ,
+		@old_type varchar(20)
+
+
+	-- Assign old values attributes
+	select 
+		@old_title = title,
+		@old_correct_answer = correct_answer ,
+		@old_grade = grade ,
+		@old_type = type 
+	from Flask_Learning_Management_System.dbo.[question]
+	where id = @question_id
+
+
+	-- Assing the old Value if the new value is null
+	if @title is null
+		set @title = @old_title
+
+	if @correct_answer is null
+		set @correct_answer = @old_correct_answer
+
+	if @grade is null
+		set @grade = @old_grade
+
+	if @type is null
+		set @type = @old_type
+
+	exec validate_question
+		@title = @title,
+		@correct_answer=@correct_answer,
+		@grade = @grade,
+		@type = @type,
+		@error=@error output
+		if @error is not null
+			return
+	update Flask_Learning_Management_System.dbo.[question]
+	set
+		title = @title ,
+		correct_answer = @correct_answer,
+		grade= @grade  , 
+		type = @type
+	where id = @question_id	
+end
+
+
+go
+
+
+create proc delete_quiz_question
+@actor_id int,
+@question_id int ,
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[question] where id = @question_id)
+		begin
+			set @error = 'Question Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[quiz_question] as qq
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	on quiz.id = qq.quiz_id
+	inner join
+	Flask_Learning_Management_System.dbo.[course] as cour
+	 on cour.id = quiz.course_id
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+	
+	delete from Flask_Learning_Management_System.dbo.[question_choice]
+	where question_id = @question_id
+
+	delete from Flask_Learning_Management_System.dbo.[quiz_question]
+	where question_id = @question_id
+
+	delete from Flask_Learning_Management_System.dbo.[question]
+	where id = @question_id
+
+end
+
+go
+
+
+create proc add_question_choice
+@actor_id int,
+@question_id int ,
+@choice varchar(100),
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[question] where id = @question_id)
+		begin
+			set @error = 'Question Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[quiz_question] as qq
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	on quiz.id = qq.quiz_id
+	inner join
+	Flask_Learning_Management_System.dbo.[course] as cour
+	 on cour.id = quiz.course_id
+
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+
+	-- Choice Validation
+	exec is_valid_string 
+		@attribute_name='Choice',
+		@value = @choice,
+		@max_length= 100 ,
+		@allowed_null = 0,
+		@error = @error output
+	if	@error is not null
+		return
+
+	insert into Flask_Learning_Management_System.dbo.[question_choice]
+	(
+		question_id,
+		choice
+	)
+	values
+	(
+		@question_id,
+		@choice
+	)
+end
+
+go
+
+create proc update_question_choice
+@actor_id int,
+@question_id int ,
+@choice varchar(100),
+@old_choice varchar(100),
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[question] where id = @question_id)
+		begin
+			set @error = 'Question Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[quiz_question] as qq
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	on quiz.id = qq.quiz_id
+	inner join
+	Flask_Learning_Management_System.dbo.[course] as cour
+	 on cour.id = quiz.course_id
+
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+
+	-- Choice Validation
+	exec is_valid_string 
+		@attribute_name='Choice',
+		@value = @choice,
+		@max_length= 100 ,
+		@allowed_null = 0,
+		@error = @error output
+	if	@error is not null
+		return
+	-- Old Choice Validation
+	exec is_valid_string 
+		@attribute_name='Old Choice',
+		@value = @old_choice,
+		@max_length= 100 ,
+		@allowed_null = 0,
+		@error = @error output
+	if	@error is not null
+		return
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[question_choice] where choice = @old_choice and question_id = @question_id)
+		begin
+			set @error = 'Choice not found'
+			return
+		end 
+
+	update Flask_Learning_Management_System.dbo.[question_choice]
+		set
+			choice = @choice
+		where choice = @old_choice and @question_id = question_id
+end
+
+
+go
+
+
+create proc delete_question_choice
+@actor_id int,
+@question_id int ,
+@choice varchar(100),
+@error varchar(100) output
+as
+begin
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[question] where id = @question_id)
+		begin
+			set @error = 'Question Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[quiz_question] as qq
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	on quiz.id = qq.quiz_id
+	inner join
+	Flask_Learning_Management_System.dbo.[course] as cour
+	 on cour.id = quiz.course_id
+
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+
+	-- Choice Validation
+	exec is_valid_string 
+		@attribute_name='Choice',
+		@value = @choice,
+		@max_length= 100 ,
+		@allowed_null = 0,
+		@error = @error output
+	if	@error is not null
+		return
+
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[question_choice] where choice = @choice and question_id = @question_id)
+		begin
+			set @error = 'Choice not found'
+			return
+		end 
+
+	delete from Flask_Learning_Management_System.dbo.[question_choice]
+		where choice = @choice and @question_id = question_id
+end
+
+
+go
+
+create proc add_bank_question
+@actor_id int,
+@course_id int ,
+@title varchar(100) ,
+@correct_answer varchar(100) ,
+@grade float , 
+@type varchar(20),
+@error varchar(100) output
+as
+begin
+
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[course] where id = @course_id)
+		begin
+			set @error = 'Course Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[course]
+	where id = @course_id
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+
+	exec validate_question
+		@title = @title,
+		@correct_answer=@correct_answer,
+		@grade = @grade,
+		@type = @type,
+		@error=@error output
+		if @error is not null
+			return
+	insert into Flask_Learning_Management_System.dbo.[question]
+	(
+		title ,
+		correct_answer,
+		grade , 
+		type
+	)
+	values
+	(
+		@title ,
+		@correct_answer,
+		@grade , 
+		@type
+	)
+
+	insert into Flask_Learning_Management_System.dbo.[bank_question]
+	(
+	question_id,
+	course_id
+	)
+	values
+	(
+	cast(SCOPE_IDENTITY() as int),
+	@course_id
+	)
+	
+end
+
+go
+
+
+create proc add_quiz_question_from_bank
+@actor_id int,
+@quiz_id int,
+@question_id int ,
+@error varchar(100) output
+as
+begin
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[quiz] where id = @quiz_id)
+		begin
+			set @error = 'Quiz Not Found'
+			return
+		end
+	if not exists(select id from Flask_Learning_Management_System.dbo.[question] where id = @question_id)
+	begin
+		set @error = 'Question Not Found'
+		return
+	end
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[bank_question] where question_id = @question_id)
+	begin
+		set @error = 'Question Not Found'
+		return
+	end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[quiz_question] as qq
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	on quiz.id = qq.quiz_id
+	inner join
+	Flask_Learning_Management_System.dbo.[course] as cour
+	 on cour.id = quiz.course_id
+
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+	if exists(select * from Flask_Learning_Management_System.dbo.[quiz_question] where question_id = @question_id and quiz_id = @quiz_id)
+		begin
+			set @error = 'Question is already existed'
+			return
+		end
+
+	insert into Flask_Learning_Management_System.dbo.[quiz_question]
+	(
+		question_id,
+		quiz_id
+	)
+	values
+	(
+		@question_id,
+		@quiz_id
+	)
+end
+
+
+go
+
+
+create proc add_quiz_score
+@quiz_id int,
+@student_id int,
+@score float,
+@error varchar(100) output
+as
+begin
+	exec is_existed_and_authorized
+	@id=@student_id,
+	@role='STUDENT',
+	@exist_error_message='Student id is not found',
+	@role_error_message='Student id is not student ',
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[quiz] where id = @quiz_id)
+		begin
+			set @error = 'Quiz Not Found'
+			return
+		end
+
+		declare 
+		@course_id int
+		
+
+	select 
+		@course_id= cour.id
+	from 
+	Flask_Learning_Management_System.dbo.[course] as cour
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	 on quiz.course_id = cour.id and quiz.id = @quiz_id
+
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[enrollment] where student_id = @student_id and course_id = @course_id )
+		begin
+			set @error = 'Student is not enroll in the course'
+			return
+		end
+
+
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[quiz] where id = @quiz_id and getdate() < end_date and GETDATE() >= start_date)
+	begin
+		set @error = 'Quiz is ended'
+		return
+	end
+
+	if exists(select id from Flask_Learning_Management_System.dbo.[quiz_score] where quiz_id = @quiz_id and @student_id = student_id)
+	begin
+		set @error = 'Student quiz is already graded'
+		return
+	end
+	
+
+
+	if @score < 0.0 or @score > 1000
+	begin
+		set @error = 'Quiz score must be between 0 and 1000 values'
+		return
+	end
+
+	insert into  Flask_Learning_Management_System.dbo.[quiz_score]
+	(
+	quiz_id,
+	student_id,
+	score
+	)
+	values
+	(
+	@quiz_id,
+	@student_id,
+	@score
+	)
+end
+go
+
+
+create proc get_quiz_score
+@actor_id int,
+@quiz_id int,
+@student_id int,
+@error varchar(100) output
+as
+begin
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='ALL',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[quiz] where id = @quiz_id)
+		begin
+			set @error = 'Quiz Not Found'
+			return
+		end
+
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int,
+		@course_id int
+		
+
+	select 
+		@instructor_id= instructor_id,
+		@course_id= cour.id
+	from 
+	Flask_Learning_Management_System.dbo.[course] as cour
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as quiz
+	 on quiz.course_id = cour.id and quiz.id = @quiz_id
+
+
+	
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+	if @user_role !='STUDENT' 
+		begin
+			exec is_existed_and_authorized
+			@id=@student_id,
+			@role='STUDENT',
+			@exist_error_message='Student id is not found',
+			@role_error_message='Student id is not student ',
+			@error=@error output
+			if @error is not null
+				return 
+		end
+
+	if @user_role ='STUDENT' and not exists(select id from Flask_Learning_Management_System.dbo.[enrollment] where student_id = @actor_id and course_id = @course_id )
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[quiz_score] where quiz_id = @quiz_id and @student_id = student_id)
+	begin
+		set @error = 'Student has not taken the quiz yet'
+		return
+	end
+	
+	select score from Flask_Learning_Management_System.dbo.[quiz_score] where quiz_id = @quiz_id and @student_id = student_id
+end
+
+
+go
+
+
+create proc get_quizzes_scores
+@actor_id int,
+@course_id int,
+@error varchar(100) output
+as
+begin
+exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='INSTRUCTOR',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select id from Flask_Learning_Management_System.dbo.[course] where id = @course_id)
+		begin
+			set @error = 'Course Not Found'
+			return
+		end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+		
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[course]
+	 where @course_id = id
+
+	exec get_role 
+		@id=@actor_id,
+		@role = @user_role output
+
+
+
+	if @actor_id != @instructor_id and @user_role != 'ADMIN'
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+	-- get quizzes scores
+	
+	select qs.* from
+	Flask_Learning_Management_System.dbo.[course] as cour
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz] as q
+	on q.course_id = cour.id
+	inner join
+	Flask_Learning_Management_System.dbo.[quiz_score] as qs
+	on qs.quiz_id = q.id
+end
+
+
+go
+
+-- create proc get_student_progress
+-- @actor_id int,
+-- @course_id int,
+-- @student_id int,
+-- @error varchar(100) output
+-- as
+-- begin
+-- 	exec is_existed_and_authorized
+-- 	@id=@actor_id,
+-- 	@role='ALL',
+-- 	@allowed_admin=1,
+-- 	@error=@error output
+-- 	if @error is not null
+-- 		return
+	
+-- 	if not exists(select id from Flask_Learning_Management_System.dbo.[course] where id = @course_id)
+-- 		begin
+-- 			set @error = 'Course Not Found'
+-- 			return
+-- 		end
+
+
+-- 	declare 
+-- 		@user_role varchar(10),
+-- 		@instructor_id int
+		
+
+-- 	select 
+-- 		@instructor_id= instructor_id
+-- 	from 
+-- 	Flask_Learning_Management_System.dbo.[course]
+-- 	where id = @course_id
+
+		
+-- 	exec get_role 
+-- 		@id=@actor_id,
+-- 		@role = @user_role output
+
+
+
+-- 	if @user_role != 'STUDENT'
+-- 		begin
+-- 			exec is_existed_and_authorized
+-- 			@id=@student_id,
+-- 			@role='STUDENT',
+-- 			@exist_error_message='Student id is not found',
+-- 			@role_error_message='Student id is not student ',
+-- 			@error=@error output
+-- 			if @error is not null
+-- 				return
+-- 		end
+
+-- 	if @user_role ='STUDENT' and @actor_id != @student_id
+-- 	begin
+-- 		set @error = 'You are not authorized to perform this action.'
+-- 		return
+-- 	end
+
+-- 	if @user_role ='STUDENT' and not exists(select id from Flask_Learning_Management_System.dbo.[enrollment] where student_id = @student_id and course_id = @course_id )
+-- 		begin
+-- 			set @error = 'You are not authorized to perform this action.'
+-- 			return
+-- 		end
+	
+-- 	if  not exists(select id from Flask_Learning_Management_System.dbo.[enrollment] where student_id = @student_id and course_id = @course_id )
+-- 		begin
+-- 			set @error = 'Student is not enrolled in the course'
+-- 			return
+-- 		end
+
+-- 	if @user_role = 'INSTRUCTOR' and @instructor_id != @actor_id
+-- 		begin
+-- 			set @error = 'You are not authorized to perform this action.'
+-- 			return
+-- 		end
+
+-- 	select * from 
+-- 	Flask_Learning_Management_System.dbo.[course] as cour
+-- 	innner join
+-- 	Flask_Learning_Management_System.dbo.[q]
+-- end
+
+go
+
+create proc add_notification
+@course_id int,
+@user_id int ,
+@message varchar(500) ,
+@error varchar(100) output 
+as
+begin 
+	if not exists(select id from Flask_Learning_Management_System.dbo.[course] where id = @course_id)
+		begin
+			set @error = 'Course Not Found'
+			return
+		end
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @user_id)
+		begin
+			set @error = 'User Not Found'
+			return
+		end
+	if not exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @user_id and role != 'ADMIN')
+	begin
+		set @error = 'User must be instructor or student'
+		return
+	end
+
+	declare 
+		@user_role varchar(10),
+		@instructor_id int
+	
+
+	select 
+		@instructor_id= instructor_id
+	from 
+	Flask_Learning_Management_System.dbo.[course]
+	where id = @course_id
+
+	
+	exec get_role 
+		@id=@user_id,
+		@role = @user_role output
+
+
+
+
+	if @user_role ='STUDENT' and not exists(select id from Flask_Learning_Management_System.dbo.[enrollment] where student_id = @user_id and course_id = @course_id )
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+
+	if @user_role = 'INSTRUCTOR' and @instructor_id != @user_id
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return
+		end
+
+	-- Message Validation
+	exec is_valid_string 
+		@attribute_name='Message',
+		@value = @message,
+		@max_length= 500 ,
+		@error = @error output
+	if	@error is not null
+		return
+	
+	insert into Flask_Learning_Management_System.dbo.[notification]
+	(
+		course_id,
+		user_id,
+		message
+	)
+	values
+	(
+		@course_id,
+		@user_id,
+		@message
+	)
+end
+
+go
+
+create proc get_notification
+@actor_id int,
+@user_id int ,
+@error varchar(100) output 
+as
+begin 
+	exec is_existed_and_authorized
+	@id=@actor_id,
+	@role='ALL',
+	@allowed_admin=1,
+	@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @user_id)
+		begin
+			set @error = 'User Not Found'
+			return
+		end
+	if not exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @user_id and role != 'ADMIN')
+		begin
+			set @error = 'User must be instructor or student'
+			return
+		end
+
+	declare 
+	@user_role varchar(10)
+
+	exec get_role 
+		@id=@user_id,
+		@role = @user_role output
+
+
+	if @user_role != 'ADMIN' and @actor_id != @user_id
+	begin
+		set @error = 'You are not authorized to perform this action.'
+		return
+	end
+
+	update Flask_Learning_Management_System.dbo.[notification]
+	set status = 'read'
+	where user_id = @user_id
+
+
+	select cour.title, n.message
+	from Flask_Learning_Management_System.dbo.[notification] as n
+	inner join
+	Flask_Learning_Management_System.dbo.[course] as cour
+	on cour.id = n.course_id and n.user_id = @user_id
+	
 end
