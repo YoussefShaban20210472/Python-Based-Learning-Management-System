@@ -604,63 +604,6 @@ begin
 		end
 end;
 
-go
-create proc add_user
-@first_name varchar(30) ,
-@last_name varchar(30) ,
-@address varchar(200) ,
-@password varchar(500) ,
-@email varchar(100)  ,
-@phone_number varchar(30)  ,
-@birth_date date  ,
-@gender varchar(10)  ,
-@role varchar(10) ,
-@error varchar(100) output
-as
-begin
-
-	exec validate_user
-	@first_name = @first_name,
-	@last_name = @last_name ,
-	@address = @address ,
-	@password = @password ,
-	@email = @email  ,
-	@phone_number= @phone_number  ,
-	@birth_date = @birth_date  ,
-	@gender = @gender  ,
-	@role = @role ,
-	@error = @error  output
-	
-	if @error is not null
-		return 
-
-	-- Insert New User
-	insert into Flask_Learning_Management_System.dbo.[user]
-	(
-			first_name ,
-			last_name ,
-			address,
-			password,
-			email,
-			phone_number,
-			birth_date ,
-			gender ,
-			role
-	)
-	values
-	(
-			@first_name ,
-			@last_name ,
-			@address,
-			@password,
-			@email,
-			@phone_number,
-			@birth_date ,
-			@gender ,
-			@role
-	)
-end;
-
 go;
 
 create proc validate_media_file
@@ -700,6 +643,72 @@ begin
 		@error = @error output
 	if	@error is not null
 		return
+end;
+
+
+
+go
+create proc add_user
+@first_name varchar(30) ,
+@last_name varchar(30) ,
+@address varchar(200) ,
+@password varchar(500) ,
+@email varchar(100)  ,
+@phone_number varchar(30)  ,
+@birth_date date  ,
+@gender varchar(10)  ,
+@role varchar(10) ,
+@error varchar(100) output
+as
+begin
+
+	exec validate_user
+	@first_name = @first_name,
+	@last_name = @last_name ,
+	@address = @address ,
+	@password = @password ,
+	@email = @email  ,
+	@phone_number= @phone_number  ,
+	@birth_date = @birth_date  ,
+	@gender = @gender  ,
+	@role = @role ,
+	@error = @error  output
+	
+	if @error is not null
+		return 
+
+
+	if exists(select * from  Flask_Learning_Management_System.dbo.[user] where email = @email)
+		begin
+			set @error = 'Email is already taken'
+			return
+		end
+
+	-- Insert New User
+	insert into Flask_Learning_Management_System.dbo.[user]
+	(
+			first_name ,
+			last_name ,
+			address,
+			password,
+			email,
+			phone_number,
+			birth_date ,
+			gender ,
+			role
+	)
+	values
+	(
+			@first_name ,
+			@last_name ,
+			@address,
+			@password,
+			@email,
+			@phone_number,
+			@birth_date ,
+			@gender ,
+			@role
+	)
 end;
 
 go
@@ -771,23 +780,6 @@ begin
 		return  
 
 
-	-- Validate new attributes
-	exec validate_user
-	@first_name = @first_name,
-	@last_name = @last_name ,
-	@address = @address ,
-	@password = @password ,
-	@email = @email  ,
-	@phone_number= @phone_number  ,
-	@birth_date = @birth_date  ,
-	@gender = @gender  ,
-	@role = @role ,
-	@allowed_null = 1,
-	@error = @error  output
-	
-	if @error is not null
-		return 
-
 
 	-- Declare old values attributes
 	declare		
@@ -842,8 +834,31 @@ begin
 	if @role is null
 		set @role = @old_role
 
+	-- Validate new attributes
+	exec validate_user
+	@first_name = @first_name,
+	@last_name = @last_name ,
+	@address = @address ,
+	@password = @password ,
+	@email = @email  ,
+	@phone_number= @phone_number  ,
+	@birth_date = @birth_date  ,
+	@gender = @gender  ,
+	@role = @role ,
+	@allowed_null = 1,
+	@error = @error  output
+	
+	if @error is not null
+		return 
 
-	-- Update User
+	
+	if @email != @old_email and exists(select * from  Flask_Learning_Management_System.dbo.[user] where email = @email)
+	begin
+		set @error = 'Email is already taken'
+		return
+	end
+
+	-- Update User	
 	update Flask_Learning_Management_System.dbo.[user]
 	set first_name = @first_name,
 		last_name = @last_name ,
