@@ -1,4 +1,11 @@
-create proc check_intervals
+USE Flask_Learning_Management_System
+
+GO
+create schema Flask_Schme
+
+go
+
+create proc Flask_Schme.check_intervals
 @type varchar(100),
 @id int,
 @error varchar(100) output
@@ -94,7 +101,7 @@ end
 go
 
 
-create proc is_existed
+create proc  Flask_Schme.is_existed
 @type varchar(100),
 @id int,
 @error varchar(100) output
@@ -228,7 +235,7 @@ begin
 		end
 
 
-	exec check_intervals
+	exec Flask_Schme.check_intervals
 		@type=@type,
 		@id=@id,
 		@error=@error output
@@ -236,7 +243,7 @@ end
 
 go
 
-create proc get_course_id
+create proc  Flask_Schme.get_course_id
 @type varchar(100),
 @id int,
 @course_id int output
@@ -335,7 +342,7 @@ end
 go
 
 
-create proc check_actor_belong_to
+create proc  Flask_Schme.check_actor_belong_to
 @actor_id int,
 @type varchar(100),
 @id int,
@@ -367,7 +374,7 @@ begin
 
 
 	-- Set Course id
-	exec get_course_id 
+	exec Flask_Schme.get_course_id 
 		@type = @type,
 		@id = @id,
 		@course_id = @course_id output
@@ -393,7 +400,7 @@ end
 
 go
 
-create proc check_security
+create proc  Flask_Schme.check_security
 @actor_id int,
 @type varchar(100),
 @id int,
@@ -402,7 +409,7 @@ create proc check_security
 as 
 begin
 	-- Check if actor is existed or no
-	exec is_existed
+	exec Flask_Schme.is_existed
 	@type='USER',
 	@id=@id,
 	@error = @error output
@@ -414,7 +421,7 @@ begin
 		end 
 
 	-- Check if object is existed or no
-	exec is_existed
+	exec Flask_Schme.is_existed
 	@type=@type,
 	@id=@id,
 	@error = @error output
@@ -423,7 +430,7 @@ begin
 		return
 	
 	-- Check if actor has a relation with object
-	exec check_actor_belong_to
+	exec Flask_Schme.check_actor_belong_to
 	@actor_id=@actor_id,
 	@type=@type,
 	@id=@id,
@@ -496,7 +503,7 @@ end
 
 go
 
-create proc is_valid_string 
+create proc  Flask_Schme.is_valid_string 
 @attribute_name varchar(30),
 @value varchar(500),
 @max_length int,
@@ -524,7 +531,7 @@ begin
 		set @error= concat(@attribute_name ,' Is Less Than Or Equal To ',@max_length,' Characters.')
 		return
 	end
-end;
+end
 
 
 
@@ -544,7 +551,10 @@ end;
 
 
 go
-create proc validate_user
+
+
+
+create proc  Flask_Schme.validate_user
 @first_name varchar(30) ,
 @last_name varchar(30) ,
 @address varchar(200) ,
@@ -559,7 +569,7 @@ create proc validate_user
 as
 begin
 	-- First Name Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='First Name',
 		@value = @first_name,
 		@max_length= 30 ,
@@ -570,7 +580,7 @@ begin
 		return
 
 	-- Last Name Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Last Name',
 		@value = @last_name,
 		@max_length= 30 ,
@@ -581,7 +591,7 @@ begin
 		return
 
 	-- Address Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Address',
 		@value = @address,
 		@max_length= 200 ,
@@ -592,7 +602,7 @@ begin
 		return
 
 	-- Password Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Password',
 		@value = @password,
 		@max_length= 500 ,
@@ -603,7 +613,7 @@ begin
 		return
 
 	-- Phone Number Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Phone Number',
 		@value = @phone_number,
 		@max_length= 30 ,
@@ -614,7 +624,7 @@ begin
 		return
 
 	-- Gender Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Gender',
 		@value = @gender,
 		@max_length= 10 ,
@@ -625,11 +635,13 @@ begin
 		return
 	
 	if @gender is not null and @gender not in ('MALE', 'FEMALE')
-	set @error = 'Gender Must Be MALE Or FEMALE'
-	return
+		begin
+			set @error = 'Gender Must Be MALE Or FEMALE'
+			return
+		end
 
 	-- Role Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Role',
 		@value = @role,
 		@max_length= 10 ,
@@ -657,7 +669,7 @@ begin
 		end
 
 	-- Email Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Email',
 		@value = @email,
 		@max_length= 100 ,
@@ -672,10 +684,11 @@ begin
 			set @error = 'Email Address Is Already Taken'
 			return
 		end
-end;
+end
 
-go;
-create proc validate_dates
+go
+
+create proc  Flask_Schme.validate_dates
 @start_date datetime,
 @end_date datetime ,
 @min_duration int,
@@ -731,7 +744,7 @@ end
 go
 
 
-create proc validate_course
+create proc  Flask_Schme.validate_course
 @title varchar(100),
 @description varchar(1000)  ,
 @language varchar(50),
@@ -742,7 +755,7 @@ create proc validate_course
 as
 begin
 	-- Title Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Title',
 		@value = @title,
 		@max_length= 100 ,
@@ -753,7 +766,7 @@ begin
 		return
 
 	-- Description Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Description',
 		@value = @description,
 		@max_length= 1000 ,
@@ -764,7 +777,7 @@ begin
 		return
 
 	-- Language Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Language',
 		@value = @language,
 		@max_length= 50 ,
@@ -780,7 +793,7 @@ begin
 			declare @min_duration int
 			set @min_duration = (60 * 24 * 3)
 
-			exec validate_dates
+			exec Flask_Schme.validate_dates
 			@min_duration = @min_duration,
 			@start_date=@start_date,
 			@end_date = @end_date,
@@ -790,11 +803,11 @@ begin
 			return
 		end
 	
-end;
+end
 
 GO
 
-create proc validate_lesson
+create proc  Flask_Schme.validate_lesson
 @title varchar(100),
 @description varchar(1000),
 @start_date datetime,
@@ -805,7 +818,7 @@ create proc validate_lesson
 as
 begin
 	-- Title Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Title',
 		@value = @title,
 		@max_length= 100 ,
@@ -816,7 +829,7 @@ begin
 		return
 
 	-- Description Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Description',
 		@value = @description,
 		@max_length= 1000 ,
@@ -832,7 +845,7 @@ begin
 			declare @min_duration int
 			set @min_duration = (15)
 
-			exec validate_dates
+			exec Flask_Schme.validate_dates
 			@min_duration = @min_duration,
 			@start_date=@start_date,
 			@end_date = @end_date,
@@ -843,7 +856,7 @@ begin
 		end
 
 	-- OTP Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='OTP',
 		@value = @otp,
 		@max_length= 500 ,
@@ -852,12 +865,11 @@ begin
 		@error = @error output
 	if	@error is not null
 		return
-end;
+end
 
 go
 
-
-create proc validate_assignment_quiz
+create proc  Flask_Schme.validate_assignment_quiz
 @title varchar(100),
 @description varchar(1000),
 @start_date datetime,
@@ -869,7 +881,7 @@ create proc validate_assignment_quiz
 as
 begin
 	-- Title Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Title',
 		@value = @title,
 		@max_length= 100 ,
@@ -880,7 +892,7 @@ begin
 		return
 
 	-- Description Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Description',
 		@value = @description,
 		@max_length= 1000 ,
@@ -894,7 +906,7 @@ begin
 	if @allowed_null =0
 		begin
 
-			exec validate_dates
+			exec Flask_Schme.validate_dates
 			@min_duration = @min_duration,
 			@start_date=@start_date,
 			@end_date = @end_date,
@@ -915,13 +927,13 @@ begin
 			set @error = 'Grade must be between 0 and 1000 values.'
 			return
 		end
-end;
+end
 
 
 
-go;
+go
 
-create proc validate_media_file
+create proc  Flask_Schme.validate_media_file
 @path varchar(500),
 @name varchar(100),
 @extension varchar(100),
@@ -930,7 +942,7 @@ create proc validate_media_file
 as
 begin
 	-- Path Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Path',
 		@value = @path,
 		@max_length= 500 ,
@@ -941,7 +953,7 @@ begin
 		return
 
 	-- Name Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Name',
 		@value = @name,
 		@max_length= 100 ,
@@ -952,7 +964,7 @@ begin
 		return
 
 	-- Extension Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Extension',
 		@value = @extension,
 		@max_length= 100,
@@ -961,7 +973,7 @@ begin
 		@error = @error output
 	if	@error is not null
 		return
-end;
+end
 
 
 go
@@ -974,7 +986,7 @@ go
 
 
 
-create proc validate_question
+create proc  Flask_Schme.validate_question
 @title varchar(100) ,
 @correct_answer varchar(100) ,
 @grade float , 
@@ -984,7 +996,7 @@ create proc validate_question
 as
 begin
 	-- Title Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Title',
 		@value = @title,
 		@max_length= 100 ,
@@ -995,7 +1007,7 @@ begin
 		return
 
 	-- Correct Answer Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Correct Answer',
 		@value = @correct_answer,
 		@max_length= 100 ,
@@ -1006,7 +1018,7 @@ begin
 		return
 
 	-- Type Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Type',
 		@value = @type,
 		@max_length= 20 ,
@@ -1032,7 +1044,7 @@ begin
 			set @error = 'Grade must be between 0 and 1000 values.'
 			return
 		end
-end;
+end
 
 
 
@@ -1141,7 +1153,7 @@ end;
 
 
 go
-create proc add_user
+create proc  Flask_Schme.add_user
 @first_name varchar(30) ,
 @last_name varchar(30) ,
 @address varchar(200) ,
@@ -1155,7 +1167,7 @@ create proc add_user
 as
 begin
 
-	exec validate_user
+	exec Flask_Schme.validate_user
 	@first_name = @first_name,
 	@last_name = @last_name ,
 	@address = @address ,
@@ -1202,17 +1214,17 @@ begin
 			@gender ,
 			@role
 	)
-end;
+end
 
 go
-create proc get_user
+create proc  Flask_Schme.get_user
 @actor_id int,
 @target_id int,
 @error varchar(100) output
 as 
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 	@actor_id=@actor_id,
 	@type='USER',
 	@id=@target_id,
@@ -1227,16 +1239,16 @@ end
 
 
 
-go;
+go
 
-create proc delete_user
+create proc  Flask_Schme.delete_user
 @actor_id int,
 @target_id int,
 @error varchar(100) output
 as 
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='USER',
 		@id=@target_id,
@@ -1250,11 +1262,11 @@ begin
 end
 
 
-go;
+go
 
 
 
-create proc update_user
+create proc  Flask_Schme.update_user
 @actor_id int,
 @target_id int,
 @first_name varchar(30) ,
@@ -1271,7 +1283,7 @@ as
 begin
 	
 	-- Check Existing and authorizing of users
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='USER',
 		@id=@target_id,
@@ -1334,7 +1346,7 @@ begin
 		set @role = @old_role
 
 	-- Validate new attributes
-	exec validate_user
+	exec Flask_Schme.validate_user
 	@first_name = @first_name,
 	@last_name = @last_name ,
 	@address = @address ,
@@ -1371,13 +1383,13 @@ begin
 		role = @role 
 	where id = @target_id
 		
-end;
+end
 
-go;
+go
 
 
 
-create proc user_login
+create proc  Flask_Schme.user_login
 @password varchar(500) ,
 @email varchar(100) 
 as 
@@ -1386,9 +1398,9 @@ begin
 	where email = @email and password = @password
 end
 
-go;
+go
 
-create proc get_users
+create proc  Flask_Schme.get_users
 @actor_id int,
 @error varchar(100) output
 as 
@@ -1447,7 +1459,7 @@ go
 
 
 
-create proc add_course
+create proc  Flask_Schme.add_course
 @actor_id int,
 @instructor_id int ,
 @title varchar(100) ,
@@ -1459,7 +1471,7 @@ create proc add_course
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='USER',
 		@id=@instructor_id,
@@ -1468,7 +1480,7 @@ begin
 	if @error is not null
 		return   
 
-	exec validate_course
+	exec Flask_Schme.validate_course
 	@title = @title,
 	@description = @description ,
 	@language = @language ,
@@ -1497,13 +1509,13 @@ begin
 			@start_date,
 			@end_date
 	)
-end;
+end
 
-go;
+go
 
 
 
-create proc update_course
+create proc  Flask_Schme.update_course
 @actor_id int,
 @course_id int ,
 @title varchar(100) ,
@@ -1515,7 +1527,7 @@ create proc update_course
 as
 begin
 	
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -1559,7 +1571,7 @@ begin
 
 
 	-- Validate new attributes
-	exec validate_course
+	exec Flask_Schme.validate_course
 	@title = @title,
 	@description = @description ,
 	@language = @language ,
@@ -1578,19 +1590,19 @@ begin
 		start_date = @start_date ,
 		end_date = @end_date  
 	where id = @course_id
-end;
+end
 
 
 go
 
 
-create proc delete_course
+create proc  Flask_Schme.delete_course
 @actor_id int,
 @course_id int ,
 @error varchar(100) output
 as
 begin
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -1608,14 +1620,14 @@ end
 go
 
 
-create proc get_course
+create proc  Flask_Schme.get_course
 @actor_id int,
 @course_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -1640,7 +1652,7 @@ end
 go
 
 
-create proc get_courses
+create proc  Flask_Schme.get_courses
 @actor_id int,
 @error varchar(100) output
 as
@@ -1686,7 +1698,7 @@ end
 
 go
 
-create proc add_enrollment
+create proc  Flask_Schme.add_enrollment
 @actor_id int,
 @course_id int,
 @student_id int,
@@ -1694,7 +1706,7 @@ create proc add_enrollment
 as
 begin
 	
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='USER',
 		@id=@student_id,
@@ -1703,7 +1715,7 @@ begin
 	if @error is not null
 		return
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@student_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -1733,13 +1745,13 @@ go
 
 
 
-create proc delete_enrollment
+create proc  Flask_Schme.delete_enrollment
 @actor_id int,
 @enrollment_id int,
 @error varchar(100) output
 as
 begin
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='ENROLLMENT',
 		@id=@enrollment_id,
@@ -1774,14 +1786,14 @@ end
 
 go
 
-create proc update_enrollment
+create proc  Flask_Schme.update_enrollment
 @actor_id int,
 @enrollment_id int,
 @status varchar(20),
 @error varchar(100) output
 as
 begin
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='ENROLLMENT',
 		@id=@enrollment_id,
@@ -1811,14 +1823,14 @@ end
 
 go
 
-create proc get_enrollment
+create proc  Flask_Schme.get_enrollment
 @actor_id int,
 @enrollment_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='ENROLLMENT',
 		@id=@enrollment_id,
@@ -1832,13 +1844,13 @@ end
 
 go
 
-create proc get_enrollments
+create proc  Flask_Schme.get_enrollments
 @actor_id int,
 @course_id int,
 @error varchar(100) output
 as
 begin
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -1880,7 +1892,7 @@ end
 
 
 GO
-create proc add_lesson
+create proc  Flask_Schme.add_lesson
 @actor_id int,
 @course_id int ,
 @title varchar(100) ,
@@ -1892,7 +1904,7 @@ create proc add_lesson
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -1901,7 +1913,7 @@ begin
 	if @error is not null
 		return
 
-	exec validate_lesson
+	exec Flask_Schme.validate_lesson
 	@title = @title,
 	@description = @description ,
 	@otp = @otp ,
@@ -1936,7 +1948,7 @@ go
 
 
 
-create proc update_lesson
+create proc  Flask_Schme.update_lesson
 @actor_id int,
 @lesson_id int ,
 @title varchar(100) ,
@@ -1948,7 +1960,7 @@ create proc update_lesson
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='LESSON',
 		@id=@lesson_id,
@@ -1995,7 +2007,7 @@ begin
 		set @otp = @old_otp
 
 	-- Validate new attributes
-	exec validate_lesson
+	exec Flask_Schme.validate_lesson
 	@title = @title,
 	@description = @description ,
 	@otp = @otp,
@@ -2022,14 +2034,14 @@ end
 go
 
 
-create proc delete_lesson
+create proc  Flask_Schme.delete_lesson
 @actor_id int,
 @lesson_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='LESSON',
 		@id=@lesson_id,
@@ -2055,14 +2067,14 @@ end
 go
 
 
-create proc get_lesson
+create proc  Flask_Schme.get_lesson
 @actor_id int,
 @lesson_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='LESSON',
 		@id=@lesson_id,
@@ -2081,7 +2093,7 @@ begin
 	
 	if @user_role ='STUDENT'
 		begin
-			select less.title,less.description,iff(attend.student_id IS NOT NULL, 1, 0) as attended
+			select less.title,less.description,iif(attend.student_id IS NOT NULL, 1, 0) as attended
 			from Flask_Learning_Management_System.dbo.[lesson] as less
 			left join
 			Flask_Learning_Management_System.dbo.[attendance] as attend
@@ -2099,14 +2111,14 @@ end
 go
 
 
-create proc get_lessons
+create proc  Flask_Schme.get_lessons
 @actor_id int,
 @course_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -2126,7 +2138,7 @@ begin
 
 	if @user_role ='STUDENT'
 		begin
-			select less.title,less.description,iff(attend.student_id IS NOT NULL, 1, 0) as attended
+			select less.title,less.description,iif(attend.student_id IS NOT NULL, 1, 0) as attended
 			from Flask_Learning_Management_System.dbo.[lesson] as less
 			left join
 			Flask_Learning_Management_System.dbo.[attendance] as attend
@@ -2161,19 +2173,19 @@ end
 go
 
 
-create proc add_assignment
+create proc  Flask_Schme.add_assignment
 @actor_id int,
 @course_id int ,
 @title varchar(100) ,
 @description varchar(1000),
 @start_date datetime ,
 @end_date datetime ,
-@grade float not null ,
+@grade float ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -2187,7 +2199,7 @@ begin
 	declare @min_duration int
 	set @min_duration = (60 * 24)
 
-	exec validate_assignment_quiz
+	exec Flask_Schme.validate_assignment_quiz
 	@title = @title,
 	@description = @description ,
 	@grade = @grade ,
@@ -2224,7 +2236,7 @@ go
 
 
 
-create proc update_assignment
+create proc  Flask_Schme.update_assignment
 @actor_id int,
 @assignment_id int ,
 @title varchar(100) ,
@@ -2236,7 +2248,7 @@ create proc update_assignment
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='ASSIGNMENT',
 		@id=@assignment_id,
@@ -2285,7 +2297,7 @@ begin
 	-- Validate new attributes
 	declare @min_duration int
 	set @min_duration = (60 * 24)
-	exec validate_assignment_quiz
+	exec Flask_Schme.validate_assignment_quiz
 	@title = @title,
 	@description = @description ,
 	@grade = @grade ,
@@ -2313,14 +2325,14 @@ end
 go
 
 
-create proc delete_assignment
+create proc  Flask_Schme.delete_assignment
 @actor_id int,
 @assignment_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='ASSIGNMENT',
 		@id=@assignment_id,
@@ -2338,14 +2350,14 @@ end
 go
 
 
-create proc get_assignment
+create proc  Flask_Schme.get_assignment
 @actor_id int,
 @assignment_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='ASSIGNMENT',
 		@id=@assignment_id,
@@ -2364,7 +2376,7 @@ begin
 
 	if @user_role ='STUDENT'
 		begin
-			select assig.title,assig.description,iff(assig.student_id IS NOT NULL, 1, 0) as submited
+			select assig.title,assig.description,iif(subm.student_id IS NOT NULL, 1, 0) as submited
 			from Flask_Learning_Management_System.dbo.[assignment] as assig
 			left join
 			Flask_Learning_Management_System.dbo.[submission_assignment] as subm
@@ -2382,13 +2394,13 @@ end
 go
 
 
-create proc get_assignments
+create proc  Flask_Schme.get_assignments
 @actor_id int,
 @course_id int,
 @error varchar(100) output
 as
 begin
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -2408,7 +2420,7 @@ begin
 
 	if @user_role ='STUDENT'
 		begin
-			select assig.title,assig.description,iff(subm.student_id IS NOT NULL, 1, 0) as submited
+			select assig.title,assig.description,iif(subm.student_id IS NOT NULL, 1, 0) as submited
 			from Flask_Learning_Management_System.dbo.[assignment] as assig
 			left join
 			Flask_Learning_Management_System.dbo.[submission_assignment] as subm
@@ -2444,7 +2456,7 @@ end
 go
 
 
-create proc add_attendance
+create proc  Flask_Schme.add_attendance
 @actor_id int,
 @student_id int,
 @lesson_id int,
@@ -2452,7 +2464,7 @@ create proc add_attendance
 @error varchar(100) output
 as
 begin
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='USER',
 		@id=@student_id,
@@ -2461,7 +2473,7 @@ begin
 	if @error is not null
 		return
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@student_id,
 		@type='LESSON',
 		@id=@lesson_id,
@@ -2490,14 +2502,14 @@ go
 
 
 
-create proc get_attendance
+create proc  Flask_Schme.get_attendance
 @actor_id int,
 @attendance_id int,
 @error varchar(100) output
 as
 begin
 
-	 exec check_security
+	 exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='ATTENDANCE',
 		@id=@attendance_id,
@@ -2525,14 +2537,14 @@ go
 
 
 
-create proc get_attendances
+create proc  Flask_Schme.get_attendances
 @actor_id int,
 @course_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -2578,17 +2590,17 @@ end
 go
 
 
-create proc add_course_media_file
+create proc  Flask_Schme.add_course_media_file
 @actor_id int,
 @course_id int ,
-@path varchar(500) not null,
-@name varchar(100) not null,
-@extension varchar(100) not null,
+@path varchar(500) ,
+@name varchar(100) ,
+@extension varchar(100) ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -2598,7 +2610,7 @@ begin
 		return
 
 
-	exec validate_media_file
+	exec Flask_Schme.validate_media_file
 	@path = @path,
 	@name = @name ,
 	@extension = @extension ,
@@ -2636,14 +2648,14 @@ end
 
 go
 
-create proc delete_course_media_file
+create proc  Flask_Schme.delete_course_media_file
 @actor_id int,
 @media_file_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE MEDIA FILE',
 		@id=@media_file_id,
@@ -2672,14 +2684,14 @@ end
 go
 
 
-create proc get_course_media_file
+create proc  Flask_Schme.get_course_media_file
 @actor_id int,
 @media_file_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE MEDIA FILE',
 		@id=@media_file_id,
@@ -2697,14 +2709,14 @@ end
 go
 
 
-create proc get_course_media_files
+create proc  Flask_Schme.get_course_media_files
 @actor_id int,
 @course_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -2773,18 +2785,18 @@ end
 
 go
 
-create proc add_submission
+create proc  Flask_Schme.add_submission
 @actor_id int,
 @student_id int,
 @assignment_id int,
-@path varchar(500) not null,
-@name varchar(100) not null,
-@extension varchar(100) not null,
+@path varchar(500) ,
+@name varchar(100) ,
+@extension varchar(100),
 @error varchar(100) output
 as
 begin
 
-	 exec check_security
+	 exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='USER',
 		@id=@student_id,
@@ -2793,7 +2805,7 @@ begin
 	if @error is not null
 		return
 
-	 exec check_security
+	 exec Flask_Schme.check_security
 		@actor_id=@student_id,
 		@type='ASSIGNMENT',
 		@id=@assignment_id,
@@ -2802,7 +2814,7 @@ begin
 	if @error is not null
 		return
 
-	exec validate_media_file
+	exec Flask_Schme.validate_media_file
 	@path = @path,
 	@name = @name ,
 	@extension = @extension ,
@@ -2872,14 +2884,14 @@ end
 
 go
 
-create proc delete_submission
+create proc  Flask_Schme.delete_submission
 @actor_id int,
 @submission_id int,
 @error varchar(100) output
 as
 begin
 	
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='SUBMISSION',
 		@id=@submission_id,
@@ -2927,13 +2939,13 @@ end
 go
 
 
-create proc get_assignment_submission
+create proc  Flask_Schme.get_assignment_submission
 @actor_id int,
 @submission_id int ,
 @error varchar(100) output
 as
 begin
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='SUBMISSION',
 		@id=@submission_id,
@@ -2969,14 +2981,14 @@ end
 go
 
 
-create proc get_assignment_submissions
+create proc  Flask_Schme.get_assignment_submissions
 @actor_id int,
 @course_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -3001,7 +3013,7 @@ end
 go
 
 
-create proc add_submission_score
+create proc  Flask_Schme.add_submission_score
 @actor_id int,
 @submission_id int ,
 @score float,
@@ -3009,7 +3021,7 @@ create proc add_submission_score
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='SUBMISSION',
 		@id=@submission_id,
@@ -3049,7 +3061,7 @@ end
 
 go
 
-create proc update_submission_score
+create proc  Flask_Schme.update_submission_score
 @actor_id int,
 @submission_id int ,
 @score float,
@@ -3057,7 +3069,7 @@ create proc update_submission_score
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='SUBMISSION',
 		@id=@submission_id,
@@ -3096,14 +3108,14 @@ end
 go
 
 
-create proc get_assignment_submission_score
+create proc  Flask_Schme.get_assignment_submission_score
 @actor_id int,
 @submission_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='SUBMISSION',
 		@id=@submission_id,
@@ -3132,14 +3144,14 @@ end
 
 go
 
-create proc get_assignment_submissions_scores
+create proc  Flask_Schme.get_assignment_submissions_scores
 @actor_id int,
 @course_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -3196,19 +3208,19 @@ end
 go
 
 
-create proc add_quiz
+create proc  Flask_Schme.add_quiz
 @actor_id int,
 @course_id int ,
 @title varchar(100) ,
 @description varchar(1000),
 @start_date datetime ,
 @end_date datetime ,
-@grade float not null ,
+@grade float ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -3220,7 +3232,7 @@ begin
 	-- Validate Quiz Attributes
 	declare @min_duration int
 	set @min_duration = (15)
-	exec validate_assignment_quiz
+	exec Flask_Schme.validate_assignment_quiz
 	@title = @title,
 	@description = @description ,
 	@grade = @grade ,
@@ -3256,7 +3268,7 @@ go
 
 
 
-create proc update_quiz
+create proc  Flask_Schme.update_quiz
 @actor_id int,
 @quiz_id int ,
 @title varchar(100) ,
@@ -3268,7 +3280,7 @@ create proc update_quiz
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -3318,7 +3330,7 @@ begin
 	-- Validate new attributes
 	declare @min_duration int
 	set @min_duration = (15)
-	exec validate_assignment_quiz
+	exec Flask_Schme.validate_assignment_quiz
 	@title = @title,
 	@description = @description ,
 	@grade = @grade ,
@@ -3346,14 +3358,14 @@ end
 go
 
 
-create proc delete_quiz
+create proc  Flask_Schme.delete_quiz
 @actor_id int,
 @quiz_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -3403,14 +3415,14 @@ end
 go
 
 
-create proc get_quiz
+create proc  Flask_Schme.get_quiz
 @actor_id int,
 @quiz_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -3426,14 +3438,14 @@ end
 go
 
 
-create proc get_quiz_questions
+create proc  Flask_Schme.get_quiz_questions
 @actor_id int,
 @quiz_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -3452,14 +3464,14 @@ end
 go
 
 
-create proc get_quiz_questions_choices
+create proc  Flask_Schme.get_quiz_questions_choices
 @actor_id int,
 @quiz_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -3479,14 +3491,14 @@ end
 
 go
 
-create proc get_quizzes
+create proc  Flask_Schme.get_quizzes
 @actor_id int,
 @course_id int,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -3505,7 +3517,7 @@ begin
 	
 	if @user_role ='STUDENT'
 		begin
-			select assig.title,assig.description,iff(subm.student_id IS NOT NULL, 1, 0) as submited
+			select assig.title,assig.description,iif(subm.student_id IS NOT NULL, 1, 0) as submited
 			from Flask_Learning_Management_System.dbo.[assignment] as assig
 			left join
 			Flask_Learning_Management_System.dbo.[submission_assignment] as subm
@@ -3521,7 +3533,7 @@ end
 
 go
 
-create proc add_quiz_question
+create proc  Flask_Schme.add_quiz_question
 @actor_id int,
 @quiz_id int ,
 @title varchar(100) ,
@@ -3532,7 +3544,7 @@ create proc add_quiz_question
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -3541,7 +3553,7 @@ begin
 	if @error is not null
 		return
 
-	exec validate_question
+	exec Flask_Schme.validate_question
 		@title = @title,
 		@correct_answer=@correct_answer,
 		@grade = @grade,
@@ -3579,7 +3591,7 @@ end
 
 go
 
-create proc update_quiz_question
+create proc  Flask_Schme.update_quiz_question
 @actor_id int,
 @question_id int ,
 @title varchar(100) ,
@@ -3590,7 +3602,7 @@ create proc update_quiz_question
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ QUESTION',
 		@id=@question_id,
@@ -3630,7 +3642,7 @@ begin
 	if @type is null
 		set @type = @old_type
 
-	exec validate_question
+	exec Flask_Schme.validate_question
 		@title = @title,
 		@correct_answer=@correct_answer,
 		@grade = @grade,
@@ -3651,14 +3663,14 @@ end
 go
 
 
-create proc delete_quiz_question
+create proc  Flask_Schme.delete_quiz_question
 @actor_id int,
 @question_id int ,
 @error varchar(100) output
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ QUESTION',
 		@id=@question_id,
@@ -3681,7 +3693,7 @@ end
 go
 
 
-create proc add_question_choice
+create proc  Flask_Schme.add_question_choice
 @actor_id int,
 @question_id int ,
 @choice varchar(100),
@@ -3689,7 +3701,7 @@ create proc add_question_choice
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ QUESTION',
 		@id=@question_id,
@@ -3700,7 +3712,7 @@ begin
 
 
 	-- Choice Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Choice',
 		@value = @choice,
 		@max_length= 100 ,
@@ -3723,7 +3735,7 @@ end
 
 go
 
-create proc update_question_choice
+create proc  Flask_Schme.update_question_choice
 @actor_id int,
 @question_id int ,
 @choice varchar(100),
@@ -3732,7 +3744,7 @@ create proc update_question_choice
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ QUESTION',
 		@id=@question_id,
@@ -3743,7 +3755,7 @@ begin
 
 	
 	-- Choice Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Choice',
 		@value = @choice,
 		@max_length= 100 ,
@@ -3752,7 +3764,7 @@ begin
 	if	@error is not null
 		return
 	-- Old Choice Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Old Choice',
 		@value = @old_choice,
 		@max_length= 100 ,
@@ -3777,7 +3789,7 @@ end
 go
 
 
-create proc delete_question_choice
+create proc  Flask_Schme.delete_question_choice
 @actor_id int,
 @question_id int ,
 @choice varchar(100),
@@ -3785,7 +3797,7 @@ create proc delete_question_choice
 as
 begin
 
-		exec check_security
+		exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ QUESTION',
 		@id=@question_id,
@@ -3796,7 +3808,7 @@ begin
 
 	
 	-- Choice Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Choice',
 		@value = @choice,
 		@max_length= 100 ,
@@ -3820,7 +3832,7 @@ end
 go
 
 
-create proc add_bank_question
+create proc  Flask_Schme.add_bank_question
 @actor_id int,
 @course_id int ,
 @title varchar(100) ,
@@ -3831,7 +3843,7 @@ create proc add_bank_question
 as
 begin
 
-		exec check_security
+		exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -3840,7 +3852,7 @@ begin
 	if @error is not null
 		return
 
-	exec validate_question
+	exec Flask_Schme.validate_question
 		@title = @title,
 		@correct_answer=@correct_answer,
 		@grade = @grade,
@@ -3879,7 +3891,7 @@ end
 go
 
 
-create proc add_quiz_question_from_bank
+create proc  Flask_Schme.add_quiz_question_from_bank
 @actor_id int,
 @quiz_id int,
 @question_id int ,
@@ -3887,7 +3899,7 @@ create proc add_quiz_question_from_bank
 as
 begin
 
-		exec check_security
+		exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -3898,7 +3910,7 @@ begin
 
 	declare @course_id int
 
-	exec get_course_id 
+	exec Flask_Schme.get_course_id 
 		@type = 'QUIZ',
 		@id = @quiz_id,
 		@course_id = @course_id output
@@ -3931,7 +3943,7 @@ end
 go
 
 
-create proc add_quiz_score
+create proc  Flask_Schme.add_quiz_score
 @quiz_id int,
 @student_id int,
 @score float,
@@ -3939,7 +3951,7 @@ create proc add_quiz_score
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@student_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -3978,7 +3990,7 @@ end
 go
 
 
-create proc get_quiz_score
+create proc  Flask_Schme.get_quiz_score
 @actor_id int,
 @quiz_id int,
 @student_id int,
@@ -3986,7 +3998,7 @@ create proc get_quiz_score
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -4001,7 +4013,7 @@ begin
 			return
 		end
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@student_id,
 		@type='QUIZ',
 		@id=@quiz_id,
@@ -4023,13 +4035,13 @@ end
 go
 
 
-create proc get_quizzes_scores
+create proc  Flask_Schme.get_quizzes_scores
 @actor_id int,
 @course_id int,
 @error varchar(100) output
 as
 begin
-		exec check_security
+		exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -4080,7 +4092,7 @@ go
 
 go
 
-create proc add_notification
+create proc  Flask_Schme.add_notification
 @course_id int,
 @user_id int ,
 @message varchar(500) ,
@@ -4088,7 +4100,7 @@ create proc add_notification
 as
 begin 
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@user_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -4099,7 +4111,7 @@ begin
 
 
 	-- Message Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Message',
 		@value = @message,
 		@max_length= 500 ,
@@ -4124,14 +4136,14 @@ end
 
 go
 
-create proc get_notification
+create proc  Flask_Schme.get_notification
 @actor_id int,
 @user_id int ,
 @error varchar(100) output 
 as
 begin 
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='USER',
 		@id=@user_id,
@@ -4213,7 +4225,7 @@ end
 go
 
 
-create proc add_course_category
+create proc  Flask_Schme.add_course_category
 @actor_id int,
 @course_id int ,
 @category varchar(100),
@@ -4221,7 +4233,7 @@ create proc add_course_category
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -4232,7 +4244,7 @@ begin
 
 
 	-- Category Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Category',
 		@value = @category,
 		@max_length= 100 ,
@@ -4263,7 +4275,7 @@ end
 go
 
 
-create proc update_course_category
+create proc  Flask_Schme.update_course_category
 @actor_id int,
 @course_id int ,
 @old_category varchar(100),
@@ -4272,7 +4284,7 @@ create proc update_course_category
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -4283,7 +4295,7 @@ begin
 
 
 	-- Category Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Category',
 		@value = @category,
 		@max_length= 100 ,
@@ -4308,7 +4320,7 @@ end
 
 go
 
-create proc delete_course_category
+create proc  Flask_Schme.delete_course_category
 @actor_id int,
 @course_id int ,
 @category varchar(100),
@@ -4316,7 +4328,7 @@ create proc delete_course_category
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -4376,7 +4388,7 @@ go
 
 
 
-create proc add_course_skill
+create proc  Flask_Schme.add_course_skill
 @actor_id int,
 @course_id int ,
 @skill varchar(100),
@@ -4384,7 +4396,7 @@ create proc add_course_skill
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -4395,7 +4407,7 @@ begin
 
 
 	-- Skill Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Skill',
 		@value = @skill,
 		@max_length= 100 ,
@@ -4426,7 +4438,7 @@ end
 go
 
 
-create proc update_course_skill
+create proc  Flask_Schme.update_course_skill
 @actor_id int,
 @course_id int ,
 @old_skill varchar(100),
@@ -4435,7 +4447,7 @@ create proc update_course_skill
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
@@ -4446,7 +4458,7 @@ begin
 
 
 	-- Skill Validation
-	exec is_valid_string 
+	exec Flask_Schme.is_valid_string 
 		@attribute_name='Skill',
 		@value = @skill,
 		@max_length= 100 ,
@@ -4471,7 +4483,7 @@ end
 
 go
 
-create proc delete_course_skill
+create proc  Flask_Schme.delete_course_skill
 @actor_id int,
 @course_id int ,
 @skill varchar(100),
@@ -4479,7 +4491,7 @@ create proc delete_course_skill
 as
 begin
 
-	exec check_security
+	exec Flask_Schme.check_security
 		@actor_id=@actor_id,
 		@type='COURSE',
 		@id=@course_id,
