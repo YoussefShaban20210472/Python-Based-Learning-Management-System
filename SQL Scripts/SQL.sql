@@ -77,14 +77,15 @@ begin
 				),
 			);
 		
-			-- Catery Table
-			create table Flask_Learning_Management_System.dbo.[catery]
+			-- Category Table
+			create table Flask_Learning_Management_System.dbo.[category]
 			(
 			-- Attributes
 				course_id int not null ,
-				catery varchar(100) not null ,
+				category varchar(100) not null ,
 			-- Constraints
-				constraint catery_constraint_course_id_and_catery_primary_key primary key(course_id,catery),
+				constraint category_constraint_course_id_and_catery_primary_key primary key(course_id,category),
+				constraint category_constraint_category_not_empty check(len(category) >2),
 			);
 		
 			-- Skill Table
@@ -95,6 +96,7 @@ begin
 				skill varchar(100) not null ,
 			-- Constraints
 				constraint skill_constraint_course_id_and_skill_primary_key primary key(course_id,skill),
+				constraint skill_constraint_skill_not_empty check(len(skill) >2),
 			);
 		
 			-- Media File Table
