@@ -1,3 +1,99 @@
+create proc check_intervals
+@type varchar(100),
+@id int,
+@error varchar(100) output
+as
+begin
+	
+	if @type = 'COURSE'
+		begin
+			if not exists(select * from Flask_Learning_Management_System.dbo.[course] where id = @id and start_date <= getdate())
+				begin	
+					set @error = concat(@type,' has not started yet')
+					return 
+				end
+
+			if not exists(select * from Flask_Learning_Management_System.dbo.[course] where id = @id and end_date >= getdate())
+				begin	
+					set @error = concat(@type,' finished')
+					return 
+				end
+		end
+
+	if @type = 'ENROLLMENT'
+		return
+
+	if @type = 'LESSON'
+	begin
+		if not exists(select * from Flask_Learning_Management_System.dbo.[lesson] where id = @id and start_date <= getdate())
+			begin	
+				set @error = concat(@type,' has not started yet')
+				return 
+			end
+
+		if not exists(select * from Flask_Learning_Management_System.dbo.[lesson] where id = @id and end_date >= getdate())
+			begin	
+				set @error = concat(@type,' finished')
+				return 
+			end
+		end
+	end
+
+	if @type = 'ASSIGNMENT'
+		begin
+			if not exists(select * from Flask_Learning_Management_System.dbo.[assignment] where id = @id and start_date <= getdate())
+				begin	
+					set @error = concat(@type,' has not started yet')
+					return 
+				end
+
+			if not exists(select * from Flask_Learning_Management_System.dbo.[assignment] where id = @id and end_date >= getdate())
+				begin	
+					set @error = concat(@type,' finished')
+					return 
+				end
+		end
+
+	if @type = 'QUIZ'
+		begin
+			if not exists(select * from Flask_Learning_Management_System.dbo.[quiz] where id = @id and start_date <= getdate())
+				begin	
+					set @error = concat(@type,' has not started yet')
+					return 
+				end
+
+			if not exists(select * from Flask_Learning_Management_System.dbo.[quiz] where id = @id and end_date >= getdate())
+				begin	
+					set @error = concat(@type,' finished')
+					return 
+				end
+		end
+
+	if @type = 'USER'
+		return
+	if @type = 'ATTENDANCE'
+		return
+
+	if @type = 'SUBMISSION'
+		return
+	if @type = 'MEDIA FILE'
+	begin
+		return
+	if @type = 'QUIZ QUESTION'
+		return
+
+	if @type = 'BANK QUESTION'
+		return
+
+	if @type = 'NOTIFICATION'
+		return
+	if @type = 'COURSE MEDIA FILE'
+		return
+end
+
+go
+
+
 create proc is_existed
 @type varchar(100),
 @id int,
@@ -19,6 +115,18 @@ begin
 			if not exists(select * from Flask_Learning_Management_System.dbo.[course] where id = @id)
 				begin	
 					set @error = concat(@type,' NOT FOUND')
+					return 
+				end
+
+			if not exists(select * from Flask_Learning_Management_System.dbo.[course] where id = @id and start_date <= getdate())
+				begin	
+					set @error = concat(@type,' Has not started yet')
+					return 
+				end
+
+			if not exists(select * from Flask_Learning_Management_System.dbo.[course] where id = @id and start_date <= getdate())
+				begin	
+					set @error = concat(@type,' Has not started yet')
 					return 
 				end
 		end
@@ -118,6 +226,12 @@ begin
 					return 
 				end
 		end
+
+
+	exec check_intervals
+		@type=@type,
+		@id=@id,
+		@error=@error output
 end
 
 go
@@ -449,6 +563,7 @@ begin
 		@attribute_name='First Name',
 		@value = @first_name,
 		@max_length= 30 ,
+		@min_length=3,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -459,6 +574,7 @@ begin
 		@attribute_name='Last Name',
 		@value = @last_name,
 		@max_length= 30 ,
+		@min_length=3,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -469,6 +585,7 @@ begin
 		@attribute_name='Address',
 		@value = @address,
 		@max_length= 200 ,
+		@min_length=4,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -479,6 +596,7 @@ begin
 		@attribute_name='Password',
 		@value = @password,
 		@max_length= 500 ,
+		@min_length=8,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -489,6 +607,7 @@ begin
 		@attribute_name='Phone Number',
 		@value = @phone_number,
 		@max_length= 30 ,
+		@min_length=6,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -499,6 +618,7 @@ begin
 		@attribute_name='Gender',
 		@value = @gender,
 		@max_length= 10 ,
+		@min_length=4,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -513,6 +633,7 @@ begin
 		@attribute_name='Role',
 		@value = @role,
 		@max_length= 10 ,
+		@min_length=4,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -540,6 +661,7 @@ begin
 		@attribute_name='Email',
 		@value = @email,
 		@max_length= 100 ,
+		@min_length=6,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -624,6 +746,7 @@ begin
 		@attribute_name='Title',
 		@value = @title,
 		@max_length= 100 ,
+		@min_length=10,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -634,6 +757,7 @@ begin
 		@attribute_name='Description',
 		@value = @description,
 		@max_length= 1000 ,
+		@min_length=50,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -644,6 +768,7 @@ begin
 		@attribute_name='Language',
 		@value = @language,
 		@max_length= 50 ,
+		@min_length=3,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -684,6 +809,7 @@ begin
 		@attribute_name='Title',
 		@value = @title,
 		@max_length= 100 ,
+		@min_length=10,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -694,6 +820,7 @@ begin
 		@attribute_name='Description',
 		@value = @description,
 		@max_length= 1000 ,
+		@min_length=50,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -720,6 +847,7 @@ begin
 		@attribute_name='OTP',
 		@value = @otp,
 		@max_length= 500 ,
+		@min_length=10,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -745,6 +873,7 @@ begin
 		@attribute_name='Title',
 		@value = @title,
 		@max_length= 100 ,
+		@min_length=10,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -755,6 +884,7 @@ begin
 		@attribute_name='Description',
 		@value = @description,
 		@max_length= 1000 ,
+		@min_length=50,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -804,6 +934,7 @@ begin
 		@attribute_name='Path',
 		@value = @path,
 		@max_length= 500 ,
+		@min_length=5,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -814,6 +945,7 @@ begin
 		@attribute_name='Name',
 		@value = @name,
 		@max_length= 100 ,
+		@min_length=1,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -823,7 +955,8 @@ begin
 	exec is_valid_string 
 		@attribute_name='Extension',
 		@value = @extension,
-		@max_length= 100 ,
+		@max_length= 100,
+		@min_length=1,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -855,6 +988,7 @@ begin
 		@attribute_name='Title',
 		@value = @title,
 		@max_length= 100 ,
+		@min_length=5,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -865,6 +999,7 @@ begin
 		@attribute_name='Correct Answer',
 		@value = @correct_answer,
 		@max_length= 100 ,
+		@min_length=1,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -875,6 +1010,7 @@ begin
 		@attribute_name='Type',
 		@value = @type,
 		@max_length= 20 ,
+		@min_length=3,
 		@allowed_null = @allowed_null,
 		@error = @error output
 	if	@error is not null
@@ -1558,6 +1694,25 @@ create proc add_enrollment
 as
 begin
 	
+	exec check_security
+		@actor_id=@actor_id,
+		@type='USER',
+		@id=@student_id,
+		@target_role = 'STUDENT',
+		@error=@error output
+	if @error is not null
+		return
+
+	exec check_security
+		@actor_id=@student_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'STUDENT',
+		@error=@error output
+	if @error is not null
+		return
+
+
 
 	insert into Flask_Learning_Management_System.dbo.[enrollment]
 	(
@@ -2297,6 +2452,25 @@ create proc add_attendance
 @error varchar(100) output
 as
 begin
+	exec check_security
+		@actor_id=@actor_id,
+		@type='USER',
+		@id=@student_id,
+		@target_role = 'STUDENT',
+		@error=@error output
+	if @error is not null
+		return
+
+	exec check_security
+		@actor_id=@student_id,
+		@type='LESSON',
+		@id=@lesson_id,
+		@target_role = 'STUDENT',
+		@error=@error output
+	if @error is not null
+		return
+
+
 	-- add new attendance
 	insert into  Flask_Learning_Management_System.dbo.[attendance]
 	(
@@ -2322,7 +2496,27 @@ create proc get_attendance
 @error varchar(100) output
 as
 begin
-	declare @d int
+
+	 exec check_security
+		@actor_id=@actor_id,
+		@type='ATTENDANCE',
+		@id=@attendance_id,
+		@target_role = 'ALL',
+		@error=@error output
+	if @error is not null
+		return
+
+	if	exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @actor_id and role = 'STUDENT')
+		and
+		not exists(select * from Flask_Learning_Management_System.dbo.[attendance] where student_id = @actor_id and id = @attendance_id)
+
+		begin
+			set @error = 'You are not authorized to perform this action.'
+			return 
+		end
+		
+	select * from Flask_Learning_Management_System.dbo.[attendance]
+	where id =@attendance_id
 end
 
 
@@ -2590,6 +2784,24 @@ create proc add_submission
 as
 begin
 
+	 exec check_security
+		@actor_id=@actor_id,
+		@type='USER',
+		@id=@student_id,
+		@target_role = 'STUDENT',
+		@error=@error output
+	if @error is not null
+		return
+
+	 exec check_security
+		@actor_id=@student_id,
+		@type='ASSIGNMENT',
+		@id=@assignment_id,
+		@target_role = 'ALL',
+		@error=@error output
+	if @error is not null
+		return
+
 	exec validate_media_file
 	@path = @path,
 	@name = @name ,
@@ -2666,6 +2878,24 @@ create proc delete_submission
 @error varchar(100) output
 as
 begin
+	
+	exec check_security
+		@actor_id=@actor_id,
+		@type='SUBMISSION',
+		@id=@submission_id,
+		@target_role = 'STUDENT',
+		@error=@error output
+	if @error is not null
+		return
+
+	if	exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @actor_id and role = 'STUDENT')
+		and
+		not exists(select * from Flask_Learning_Management_System.dbo.[submission_assignment] where student_id = @actor_id and submission_id = @submission_id)
+
+			begin
+				set @error = 'You are not authorized to perform this action.'
+				return 
+			end
 
 	delete from Flask_Learning_Management_System.dbo.[submission_assignment] 
 	where @submission_id = submission_id
@@ -2703,6 +2933,25 @@ create proc get_assignment_submission
 @error varchar(100) output
 as
 begin
+	exec check_security
+		@actor_id=@actor_id,
+		@type='SUBMISSION',
+		@id=@submission_id,
+		@target_role = 'ALL',
+		@error=@error output
+	if @error is not null
+		return
+
+	if	exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @actor_id and role = 'STUDENT')
+		and
+		not exists(select * from Flask_Learning_Management_System.dbo.[submission_assignment] where student_id = @actor_id and submission_id = @submission_id)
+
+			begin
+				set @error = 'You are not authorized to perform this action.'
+				return 
+			end
+
+
 	-- get assignment submission media files
 	
 	select mf.*, s.submission_date from
@@ -2853,6 +3102,24 @@ create proc get_assignment_submission_score
 @error varchar(100) output
 as
 begin
+
+	exec check_security
+		@actor_id=@actor_id,
+		@type='SUBMISSION',
+		@id=@submission_id,
+		@target_role = 'ALL',
+		@error=@error output
+	if @error is not null
+		return
+
+	if	exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @actor_id and role = 'STUDENT')
+		and
+		not exists(select * from Flask_Learning_Management_System.dbo.[submission_assignment] where student_id = @actor_id and submission_id = @submission_id)
+
+			begin
+				set @error = 'You are not authorized to perform this action.'
+				return 
+			end
 
 	-- get assignment submission media files
 	
@@ -3620,7 +3887,34 @@ create proc add_quiz_question_from_bank
 as
 begin
 
-		
+		exec check_security
+		@actor_id=@actor_id,
+		@type='QUIZ',
+		@id=@quiz_id,
+		@target_role = 'INSTRUCTOR',
+		@error=@error output
+	if @error is not null
+		return
+
+	declare @course_id int
+
+	exec get_course_id 
+		@type = 'QUIZ',
+		@id = @quiz_id,
+		@course_id = @course_id output
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[bank_question] where course_id = @course_id and @question_id = question_id)
+		begin
+			set @error = 'Question Not Found'
+			return
+		end
+
+	if  exists(select * from Flask_Learning_Management_System.dbo.[quiz_question] where quiz_id = @quiz_id and @question_id = question_id)
+		begin
+			set @error = 'Question is already existed'
+			return
+		end
+
 	insert into Flask_Learning_Management_System.dbo.[quiz_question]
 	(
 		question_id,
@@ -3645,12 +3939,28 @@ create proc add_quiz_score
 as
 begin
 
+	exec check_security
+		@actor_id=@student_id,
+		@type='QUIZ',
+		@id=@quiz_id,
+		@target_role = 'STUDENT',
+		@error=@error output
+	if @error is not null
+		return
+
+	if exists(select * from Flask_Learning_Management_System.dbo.[quiz_score] where quiz_id = @quiz_id and @student_id = student_id and score is not null)
+		begin
+			set @error = 'Quiz is already graded'
+			return
+		end
+
 
 	if @score < 0.0 or @score > 1000
 	begin
 		set @error = 'Quiz score must be between 0 and 1000 values'
 		return
 	end
+
 
 	insert into  Flask_Learning_Management_System.dbo.[quiz_score]
 	(
@@ -3676,7 +3986,36 @@ create proc get_quiz_score
 as
 begin
 
-	
+	exec check_security
+		@actor_id=@actor_id,
+		@type='QUIZ',
+		@id=@quiz_id,
+		@target_role = 'ALL',
+		@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @student_id and role = 'STUDENT')
+		begin
+			set @error = 'Student Not Found'
+			return
+		end
+
+	exec check_security
+		@actor_id=@student_id,
+		@type='QUIZ',
+		@id=@quiz_id,
+		@target_role = 'STUDENT',
+		@error=@error output
+	if @error is not null
+		return
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[quiz_score] where quiz_id = @quiz_id and @student_id = student_id and score is not null)
+		begin
+			set @error = 'Quiz has not graded yet'
+			return
+		end
+
 	select score from Flask_Learning_Management_System.dbo.[quiz_score] where quiz_id = @quiz_id and @student_id = student_id
 end
 
@@ -3749,11 +4088,22 @@ create proc add_notification
 as
 begin 
 
+	exec check_security
+		@actor_id=@user_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'ALL',
+		@error=@error output
+	if @error is not null
+		return
+
+
 	-- Message Validation
 	exec is_valid_string 
 		@attribute_name='Message',
 		@value = @message,
 		@max_length= 500 ,
+		@min_length=10,
 		@error = @error output
 	if	@error is not null
 		return
@@ -3808,4 +4158,343 @@ begin
 	Flask_Learning_Management_System.dbo.[course] as cour
 	on cour.id = n.course_id and n.user_id = @user_id
 	
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+go
+
+
+create proc add_course_category
+@actor_id int,
+@course_id int ,
+@category varchar(100),
+@error varchar(100) output
+as
+begin
+
+	exec check_security
+		@actor_id=@actor_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'INSTRUCTOR',
+		@error=@error output
+	if @error is not null
+		return
+
+
+	-- Category Validation
+	exec is_valid_string 
+		@attribute_name='Category',
+		@value = @category,
+		@max_length= 100 ,
+		@min_length= 3,
+		@allowed_null = 0,
+		@error = @error output
+	if	@error is not null
+		return
+
+	if exists(select * from Flask_Learning_Management_System.dbo.[category] where course_id = @course_id and category = @category)
+		begin
+			set @error = 'Category is already existed'
+			return
+		end
+
+	insert into Flask_Learning_Management_System.dbo.[category]
+	(
+		course_id,
+		category
+	)
+	values
+	(
+		@course_id,
+		@category
+	)
+end
+
+go
+
+
+create proc update_course_category
+@actor_id int,
+@course_id int ,
+@old_category varchar(100),
+@category varchar(100),
+@error varchar(100) output
+as
+begin
+
+	exec check_security
+		@actor_id=@actor_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'INSTRUCTOR',
+		@error=@error output
+	if @error is not null
+		return
+
+
+	-- Category Validation
+	exec is_valid_string 
+		@attribute_name='Category',
+		@value = @category,
+		@max_length= 100 ,
+		@min_length= 3,
+		@allowed_null = 0,
+		@error = @error output
+	if	@error is not null
+		return
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[category] where course_id = @course_id and category = @old_category)
+		begin
+			set @error = 'Old Category Not Found'
+			return
+		end
+
+	update Flask_Learning_Management_System.dbo.[category]
+	set 
+		category = @category
+	where  course_id = @course_id and category = @old_category
+end
+
+
+go
+
+create proc delete_course_category
+@actor_id int,
+@course_id int ,
+@category varchar(100),
+@error varchar(100) output
+as
+begin
+
+	exec check_security
+		@actor_id=@actor_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'INSTRUCTOR',
+		@error=@error output
+	if @error is not null
+		return
+
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[category] where course_id = @course_id and category = @category)
+		begin
+			set @error = 'Category Not Found'
+			return
+		end
+
+	delete from Flask_Learning_Management_System.dbo.[category]
+	where  course_id = @course_id and category = @category
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+go
+
+
+
+create proc add_course_skill
+@actor_id int,
+@course_id int ,
+@skill varchar(100),
+@error varchar(100) output
+as
+begin
+
+	exec check_security
+		@actor_id=@actor_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'INSTRUCTOR',
+		@error=@error output
+	if @error is not null
+		return
+
+
+	-- Skill Validation
+	exec is_valid_string 
+		@attribute_name='Skill',
+		@value = @skill,
+		@max_length= 100 ,
+		@min_length= 3,
+		@allowed_null = 0,
+		@error = @error output
+	if	@error is not null
+		return
+
+	if exists(select * from Flask_Learning_Management_System.dbo.[skill] where course_id = @course_id and skill = @skill)
+		begin
+			set @error = 'Skill is already existed'
+			return
+		end
+
+	insert into Flask_Learning_Management_System.dbo.[skill]
+	(
+		course_id,
+		skill
+	)
+	values
+	(
+		@course_id,
+		@skill
+	)
+end
+
+go
+
+
+create proc update_course_skill
+@actor_id int,
+@course_id int ,
+@old_skill varchar(100),
+@skill varchar(100),
+@error varchar(100) output
+as
+begin
+
+	exec check_security
+		@actor_id=@actor_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'INSTRUCTOR',
+		@error=@error output
+	if @error is not null
+		return
+
+
+	-- Skill Validation
+	exec is_valid_string 
+		@attribute_name='Skill',
+		@value = @skill,
+		@max_length= 100 ,
+		@min_length= 3,
+		@allowed_null = 0,
+		@error = @error output
+	if	@error is not null
+		return
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[skill] where course_id = @course_id and skill = @old_skill)
+		begin
+			set @error = 'Old Skill Not Found'
+			return
+		end
+
+	update Flask_Learning_Management_System.dbo.[skill]
+	set 
+		skill = @skill
+	where  course_id = @course_id and skill = @old_skill
+end
+
+
+go
+
+create proc delete_course_skill
+@actor_id int,
+@course_id int ,
+@skill varchar(100),
+@error varchar(100) output
+as
+begin
+
+	exec check_security
+		@actor_id=@actor_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'INSTRUCTOR',
+		@error=@error output
+	if @error is not null
+		return
+
+
+	if not exists(select * from Flask_Learning_Management_System.dbo.[category] where course_id = @course_id and category = @skill)
+		begin
+			set @error = 'Skill Not Found'
+			return
+		end
+
+	delete from Flask_Learning_Management_System.dbo.[category]
+	where  course_id = @course_id and category = @skill
 end
