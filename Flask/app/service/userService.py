@@ -14,27 +14,44 @@ def login():
 
 
 def get_all_users():
-    return 'get_all_user',200
+    data = {'actor_id': getattr(request, "actor_id", None)}
+    print(data)
+
+    return userRepository.get_all_users(data)
 
 def get_user_by_id(id):
-    return 'get_user_by_id',200
+    data = {'actor_id': getattr(request, "actor_id", None),'target_id': id}
+    print(data)
+    return userRepository.get_user_by_id(data)
 
 
 def update_user_by_id(id):
-    return 'update_user_by_id',200
+    data = request.get_json()
+    data.update({'actor_id': getattr(request, "actor_id", None), 'target_id': id})
+    print(data)
+    return userRepository.update_user_by_id(data)
 
 def delete_user_by_id(id):
-    return 'delete_user_by_id',200
+    data = {'actor_id': getattr(request, "actor_id", None),'target_id': id}
+    print(data)
+    return userRepository.delete_user_by_id(data)
 
 
 def get_me():
-    return 'get_me',200
+    data = {'actor_id': getattr(request, "actor_id", None), 'target_id': getattr(request, "actor_id", None)}
+    print(data)
+    return userRepository.get_user_by_id(data)
 
 def update_me():
-    return 'get_me',200
+    data = request.get_json()
+    data.update({'actor_id': getattr(request, "actor_id", None), 'target_id': getattr(request, "actor_id", None)})
+    print(data)
+    return userRepository.update_user_by_id(data)
 
 def delete_me():
-    return 'get_me',200
+    data = {'actor_id': getattr(request, "actor_id", None),'target_id': getattr(request, "actor_id", None)}
+    print(data)
+    return userRepository.delete_user_by_id(data)
 
 
 
