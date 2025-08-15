@@ -450,7 +450,7 @@ begin
 	-- Check if actor is existed or no
 	exec Flask_Schema.is_existed
 	@type='USER',
-	@id=@id,
+	@id=@actor_id,
 	@error = @error output,
         @code = @code output
 
@@ -1326,7 +1326,7 @@ begin
 			@role
 	)
 
-	select 'User Created Successfully' as message, 202 as code 
+	select 'User Created Successfully' as message, 201 as code 
 end
 
 go
@@ -1402,7 +1402,6 @@ create proc  Flask_Schema.update_user
 @phone_number varchar(30)  ,
 @birth_date date  ,
 @gender varchar(10)  ,
-@role varchar(10) ,
 @error varchar(100) output,
 @code int output
 as
@@ -1430,7 +1429,8 @@ begin
 		@old_phone_number varchar(30)  ,
 		@old_birth_date date  ,
 		@old_gender varchar(10)  ,
-		@old_role varchar(10) 
+		@old_role varchar(10) ,
+		@role varchar(10) 
 
 
 	-- Assign old values attributes
@@ -1460,6 +1460,9 @@ begin
 
 	if @email is null
 		set @email = @old_email
+
+	if @password is null
+		set @password = @old_password
 
 	if @phone_number is null
 		set @phone_number = @old_phone_number
@@ -1664,7 +1667,7 @@ begin
 	)
 
 
-	select 'Course Created Successfully' as message, 202 as code 
+	select 'Course Created Successfully' as message, 201 as code 
 end
 
 go
@@ -1919,7 +1922,7 @@ begin
 	@student_id
 	)
 
-	select 'Enrollment Created Successfully' as message, 202 as code
+	select 'Enrollment Created Successfully' as message, 201 as code
 
 end
 
@@ -2155,7 +2158,7 @@ begin
 			@end_date
 	)
 
-	select 'Lesson Created Successfully' as message, 202 as code
+	select 'Lesson Created Successfully' as message, 201 as code
 end
 
 go
@@ -2471,7 +2474,7 @@ begin
 			@end_date
 	)
 
-	select 'Assignment Created Successfully' as message, 202 as code
+	select 'Assignment Created Successfully' as message, 201 as code
 end
 
 go
@@ -2763,7 +2766,7 @@ begin
 	@student_id
 	)
 
-	select 'Attendance Created Successfully' as message, 202 as code
+	select 'Attendance Created Successfully' as message, 201 as code
 
 end
 
@@ -3618,7 +3621,7 @@ begin
 			@end_date
 	)
 
-	select 'Quiz Created Successfully' as message, 202 as code
+	select 'Quiz Created Successfully' as message, 201 as code
 end
 
 go
@@ -3978,7 +3981,7 @@ begin
 	@quiz_id
 	)
 	
-	select 'Quiz Question Created Successfully' as message, 202 as code
+	select 'Quiz Question Created Successfully' as message, 201 as code
 end
 
 go
@@ -4141,7 +4144,7 @@ begin
 		@choice
 	)
 
-	select 'Question Choice Created Successfully' as message, 202 as code
+	select 'Question Choice Created Successfully' as message, 201 as code
 end
 
 go
@@ -4319,7 +4322,7 @@ begin
 	@course_id
 	)
 	
-	select 'Bank Question Created Successfully' as message, 202 as code
+	select 'Bank Question Created Successfully' as message, 201 as code
 end
 
 go
@@ -4599,7 +4602,7 @@ begin
 		@message
 	)
 
-	select 'Notification Created Successfully' as message, 202 as code
+	select 'Notification Created Successfully' as message, 201 as code
 end
 
 go
@@ -4750,7 +4753,7 @@ begin
 		@category
 	)
 
-	select 'Course Category Created Successfully' as message, 202 as code
+	select 'Course Category Created Successfully' as message, 201 as code
 end
 
 go
@@ -4936,7 +4939,7 @@ begin
 		@skill
 	)
 
-	select 'Course Skill Created Successfully' as message, 202 as code
+	select 'Course Skill Created Successfully' as message, 201 as code
 end
 
 go
