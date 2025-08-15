@@ -1,4 +1,5 @@
 from app.database.connection import execute_procedure
+
 def add_user(data):
     procedure_name = 'add_user'
     params = ('first_name', 'last_name', 'address', 'password', 'email', 'phone_number', 'birth_date', 'gender', 'role')
@@ -9,35 +10,31 @@ def login(data):
     return execute_procedure(procedure_name,params,data)
 
 
-def get_all_users():
-    return 'get_all_user',200
+def get_all_users(data):
+    procedure_name = 'get_users'
+    params = ('actor_id',)
+    return execute_procedure(procedure_name,params,data)
 
-def get_user_by_id(id):
-    return 'get_user_by_id',200
-
-
-def update_user_by_id(id):
-    return 'update_user_by_id',200
-
-def delete_user_by_id(id):
-    return 'delete_user_by_id',200
+def get_user_by_id(data):
+    procedure_name = 'get_user'
+    params = ('actor_id','target_id')
+    return execute_procedure(procedure_name,params,data)
 
 
-def get_me():
-    return 'get_me',200
+def update_user_by_id(data):
+    procedure_name = 'update_user'
+    params = ('actor_id','target_id','first_name', 'last_name', 'address', 'password', 'email', 'phone_number', 'birth_date', 'gender')
+    return execute_procedure(procedure_name,params,data)
 
-def update_me():
-    return 'get_me',200
-
-def delete_me():
-    return 'get_me',200
+def delete_user_by_id(data):
+    procedure_name = 'delete_user'
+    params = ('actor_id','target_id')
+    return execute_procedure(procedure_name,params,data)
 
 
 
 
 
-def logout():
-    return 'logout',200
 
 
 
