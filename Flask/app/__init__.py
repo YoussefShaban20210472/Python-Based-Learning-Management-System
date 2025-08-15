@@ -15,9 +15,16 @@ from app.controller.questionBankController import question_bank_blueprint
 from app.controller.quizAttemptController import quiz_attempt_blueprint
 from app.controller.quizBankController import quiz_bank_blueprint
 from app.controller.quizGradeController import quiz_grade_blueprint
+from app.middleware.middleware import authenticate
 
 def create_app():
     app = Flask(__name__)
+
+    # Middlewares
+    app.before_request(authenticate)
+
+
+
 
     app.register_blueprint(user_blueprint,                  url_prefix='/user')
 
