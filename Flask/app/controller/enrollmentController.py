@@ -29,3 +29,8 @@ enrollment_blueprint.route('/',methods=['GET'])(get_my_enrollment)
 #   Delete enrollment by using authenticated student
 enrollment_blueprint.route('/',methods=['DELETE'])(delete_my_enrollment)
 
+
+# Admin role
+
+#   Delete enrollment by id
+enrollment_blueprint.route('/<int:enrollment_id>',methods=['DELETE'])(delete_enrollment_by_id)
