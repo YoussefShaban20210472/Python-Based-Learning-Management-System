@@ -23,3 +23,10 @@ assignment_submission_blueprint.route('/',methods=['GET'])(get_my_submission)
 
 #   Delete assignment submission by using authenticated user
 assignment_submission_blueprint.route('/',methods=['DELETE'])(delete_my_submission)
+
+
+
+# Admin role
+
+#   Delete assignment submission by id
+assignment_submission_blueprint.route('/<int:submission_id>',methods=['DELETE'])(delete_submission_by_id)
