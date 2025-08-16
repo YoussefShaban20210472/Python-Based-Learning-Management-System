@@ -12,7 +12,7 @@ quiz_blueprint = Blueprint('quiz', __name__)
 quiz_blueprint.route('/',methods=['POST'])(add_quiz)
 
 #   Get quiz by id
-quiz_blueprint.route('/<int:id>',methods=['GET'])(get_quiz_by_id)
+quiz_blueprint.route('/<int:quiz_id>',methods=['GET'])(get_quiz_by_id)
 
 #   Get all quizzes
 quiz_blueprint.route('/all',methods=['GET'])(get_all_quizzes)
