@@ -7,7 +7,7 @@ attendance_blueprint = Blueprint('attendance', __name__)
 # Instructor role
 
 #   Get attendance by id
-attendance_blueprint.route('/<int:id>',methods=['GET'])(get_attendance_by_id)
+attendance_blueprint.route('/<int:attendance_id>',methods=['GET'])(get_attendance_by_id)
 
 #   Get all attendances
 attendance_blueprint.route('/all',methods=['GET'])(get_all_attendances)
