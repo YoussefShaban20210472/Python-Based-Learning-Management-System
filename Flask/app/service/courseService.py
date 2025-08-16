@@ -10,28 +10,24 @@ def add_course():
     return execute(inspect.currentframe().f_code.co_name, data)
 
 #   Get course by id
-def get_course_by_id(id):
-    data = request.get_json()
-    data.update({'actor_id': getattr(request, "actor_id", None), 'course_id': id})
+def get_course_by_id(course_id):
+    data = {'actor_id': getattr(request, "actor_id", None), 'course_id': course_id}
     return execute(inspect.currentframe().f_code.co_name, data)
 
-
-def update_course_by_id(id):
+#   Update course by id
+def update_course_by_id(course_id):
     data = request.get_json()
-    data.update({'actor_id': getattr(request, "actor_id", None), 'course_id': id})
+    data.update({'actor_id': getattr(request, "actor_id", None), 'course_id': course_id})
     return execute(inspect.currentframe().f_code.co_name, data)
 
-
-def delete_course_by_id(id):
-    data = request.get_json()
-    data.update({'actor_id': getattr(request, "actor_id", None), 'course_id': id})
+#   Delete course by id
+def delete_course_by_id(course_id):
+    data = {'actor_id': getattr(request, "actor_id", None), 'course_id': course_id}
     return execute(inspect.currentframe().f_code.co_name, data)
 
-
-
+#   Get all courses
 def get_all_courses():
-    data = request.get_json()
-    data.update({'actor_id': getattr(request, "actor_id", None), 'course_id': id})
+    data = {'actor_id': getattr(request, "actor_id", None)}
     return execute(inspect.currentframe().f_code.co_name, data)
 
 
