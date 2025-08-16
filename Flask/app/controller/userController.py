@@ -1,7 +1,7 @@
 from flask import Blueprint
-
-user_blueprint = Blueprint('user', __name__)
 from app.service.userService import *
+user_blueprint = Blueprint('user', __name__)
+
 
 
 
@@ -11,13 +11,13 @@ from app.service.userService import *
 user_blueprint.route('/all',methods=['GET'])(get_all_users)
 
 #   Get user by id
-user_blueprint.route('/<int:id>',methods=['GET'])(get_user_by_id)
+user_blueprint.route('/<int:user_id>',methods=['GET'])(get_user_by_id)
 
 #   Update user by id
-user_blueprint.route('/<int:id>',methods=['PUT'])(update_user_by_id)
+user_blueprint.route('/<int:user_id>',methods=['PUT'])(update_user_by_id)
 
 #   Delete user by id
-user_blueprint.route('/<int:id>',methods=['DELETE'])(delete_user_by_id)
+user_blueprint.route('/<int:user_id>',methods=['DELETE'])(delete_user_by_id)
 
 
 
