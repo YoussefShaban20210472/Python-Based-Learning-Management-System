@@ -1,5 +1,5 @@
 from flask import  request
-from app.Repository.userRepository import login
+from app.Repository.Repository import login
 
 
 def authenticate():
