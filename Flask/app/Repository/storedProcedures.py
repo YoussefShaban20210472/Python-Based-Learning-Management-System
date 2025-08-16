@@ -75,7 +75,7 @@ stored_procedures = {
         "procedure_name": "get_course",
         "params": ("actor_id", "course_id"),
     },
-    "get_courses": {
+    "get_all_courses": {
         "procedure_name": "get_courses",
         "params": ("actor_id",),
     },
@@ -131,7 +131,7 @@ stored_procedures = {
         "procedure_name": "get_lesson",
         "params": ("actor_id", "lesson_id"),
     },
-    "get_lessons": {
+    "get_all_lessons": {
         "procedure_name": "get_lessons",
         "params": ("actor_id", "course_id"),
     },
@@ -167,7 +167,7 @@ stored_procedures = {
         "procedure_name": "get_assignment",
         "params": ("actor_id", "assignment_id"),
     },
-    "get_assignments": {
+    "get_all_assignments": {
         "procedure_name": "get_assignments",
         "params": ("actor_id", "course_id"),
     },
@@ -214,11 +214,11 @@ stored_procedures = {
         "procedure_name": "delete_submission",
         "params": ("actor_id", "submission_id"),
     },
-    "get_assignment_submission_by_id": {
+    "get_submission_by_id": {
         "procedure_name": "get_assignment_submission",
         "params": ("actor_id", "submission_id"),
     },
-    "get_assignment_submissions": {
+    "get_all_submissions": {
         "procedure_name": "get_assignment_submissions",
         "params": ("actor_id", "course_id"),
     },
@@ -226,15 +226,15 @@ stored_procedures = {
         "procedure_name": "add_submission_score",
         "params": ("actor_id", "submission_id", "score"),
     },
-    "update_submission_score": {
+    "update_submission_score_by_id": {
         "procedure_name": "update_submission_score",
         "params": ("actor_id", "submission_id", "score"),
     },
-    "get_assignment_submission_score": {
+    "get_submission_score_by_id": {
         "procedure_name": "get_assignment_submission_score",
         "params": ("actor_id", "submission_id"),
     },
-    "get_assignment_submissions_scores": {
+    "get_all_submissions_scores": {
         "procedure_name": "get_assignment_submissions_scores",
         "params": ("actor_id", "course_id"),
     },
