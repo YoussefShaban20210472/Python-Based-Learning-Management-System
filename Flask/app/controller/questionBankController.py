@@ -1,25 +1,23 @@
 from flask import Blueprint
+from app.service.questionBankService import *
 
 question_bank_blueprint = Blueprint('question_bank', __name__)
-
-def demo(course_id=0,id=0):
-    return 'demo'
 
 
 
 # Instructor role
 
 #   Add new question bank
-question_bank_blueprint.route('/',methods=['POST'])(demo)
+question_bank_blueprint.route('/',methods=['POST'])(add_bank_question)
 
 #   Get question bank by id
-question_bank_blueprint.route('/<int:id>',methods=['GET'])(demo)
+question_bank_blueprint.route('/<int:id>',methods=['GET'])(get_bank_question_by_id)
 
 #   Get all questions bank
-question_bank_blueprint.route('/all',methods=['GET'])(demo)
+question_bank_blueprint.route('/all',methods=['GET'])(get_bank_questions)
 
 #   Update question bank by id
-question_bank_blueprint.route('/<int:id>',methods=['PUT'])(demo)
+question_bank_blueprint.route('/<int:id>',methods=['PUT'])(update_bank_question_by_id)
 
 #   Delete question bank by id
-question_bank_blueprint.route('/<int:id>',methods=['DELETE'])(demo)
+question_bank_blueprint.route('/<int:id>',methods=['DELETE'])(delete_bank_question_by_id)
