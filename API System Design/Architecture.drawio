@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="aGVBakDjWfH1s-EeoHJm">
-    <mxGraphModel dx="2939" dy="2494" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1593" dy="1601" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -948,7 +948,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="YWKeRWda3YgIOonKBInP-217" value="Student" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
-          <mxGeometry x="1860" y="4676" width="60" height="90" as="geometry" />
+          <mxGeometry x="1860" y="4675" width="60" height="90" as="geometry" />
         </mxCell>
         <mxCell id="YWKeRWda3YgIOonKBInP-222" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="YWKeRWda3YgIOonKBInP-221" target="qaXC5aaT69b4gklD9cOE-116" edge="1">
           <mxGeometry relative="1" as="geometry" />
