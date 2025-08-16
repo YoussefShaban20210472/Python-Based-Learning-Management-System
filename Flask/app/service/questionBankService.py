@@ -4,7 +4,8 @@ import inspect
 
 #   Add new question bank
 def add_bank_question(course_id):
-    data= {'actor_id': getattr(request, "actor_id", None), 'course_id': course_id}
+    data = request.get_json()
+    data.update({'actor_id': getattr(request, "actor_id", None), 'course_id': course_id})
     return execute(inspect.currentframe().f_code.co_name, data)
 
 #   Get question bank by id
