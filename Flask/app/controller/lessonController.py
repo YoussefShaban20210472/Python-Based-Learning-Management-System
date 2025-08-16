@@ -1,35 +1,21 @@
 from flask import Blueprint
-
+from app.service.lessonService import *
 lesson_blueprint = Blueprint('lesson', __name__)
 
-def demo(course_id=0,id=0):
-    return 'demo'
-
-
-
-# Instructor role
 
 #   Add new lesson
-lesson_blueprint.route('/',methods=['POST'])(demo)
+lesson_blueprint.route('/',methods=['POST'])(add_lesson)
 
 #   Get lesson by id
-lesson_blueprint.route('/<int:id>',methods=['GET'])(demo)
+lesson_blueprint.route('/<int:lesson_id>',methods=['GET'])(get_lesson_by_id)
 
 #   Get all lessons
-lesson_blueprint.route('/all',methods=['GET'])(demo)
+lesson_blueprint.route('/all',methods=['GET'])(get_all_lessons)
 
 #   Update lesson by id
-lesson_blueprint.route('/<int:id>',methods=['PUT'])(demo)
+lesson_blueprint.route('/<int:lesson_id>',methods=['PUT'])(update_lesson_by_id)
 
 #   Delete lesson by id
-lesson_blueprint.route('/<int:id>',methods=['DELETE'])(demo)
+lesson_blueprint.route('/<int:lesson_id>',methods=['DELETE'])(delete_lesson_by_id)
 
-
-# Student role
-
-#   Get lesson by id
-lesson_blueprint.route('/<int:id>',methods=['GET'])(demo)
-
-#   Get all lessons
-lesson_blueprint.route('/all',methods=['GET'])(demo)
 
