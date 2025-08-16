@@ -4,7 +4,8 @@ import inspect
 
 #   Add new lesson
 def add_lesson(course_id):
-    data= {'actor_id': getattr(request, "actor_id", None), 'course_id': course_id}
+    data = request.get_json()
+    data.update({'actor_id': getattr(request, "actor_id", None), 'course_id': course_id})
     return execute(inspect.currentframe().f_code.co_name, data)
 
 #   Get lesson by id
@@ -19,7 +20,8 @@ def get_all_lessons(course_id):
 
 #   Update lesson by id
 def update_lesson_by_id(lesson_id):
-    data= {'actor_id': getattr(request, "actor_id", None), 'lesson_id': lesson_id}
+    data = request.get_json()
+    data.update({'actor_id': getattr(request, "actor_id", None), 'lesson_id': lesson_id})
     return execute(inspect.currentframe().f_code.co_name, data)
 
 #   Delete lesson by id
