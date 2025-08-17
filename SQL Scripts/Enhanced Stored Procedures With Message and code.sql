@@ -568,9 +568,9 @@ begin
 		return
 	end
 
-	if len(@value) < @min_length
+	if len(@value) <= @min_length
 		begin
-			set @error= concat(@attribute_name ,' Is more Than Or Equal To ',@min_length,' Characters.')
+			set @error= concat(@attribute_name ,' Is more Than ',@min_length,' Characters.')
 			set @code = 400
 			return
 		end
@@ -798,7 +798,7 @@ begin
 			return
 		end
 
-	if datediff(minute, @start_date, @end_date)>= @min_duration
+	if datediff(minute, @start_date, @end_date)<= @min_duration
 		begin
 			if  @min_duration < 60
 				set @error= concat('Duration must be at least ',@min_duration ,' minutes')
@@ -1877,7 +1877,6 @@ end
 
 
 go
-
 create proc  Flask_Schema.add_enrollment
 @actor_id int,
 @course_id int,
@@ -1899,16 +1898,29 @@ begin
 	if @error is not null
 		return
 
-	exec Flask_Schema.check_security
-		@actor_id=@student_id,
-		@type='COURSE',
-		@id=@course_id,
-		@target_role = 'STUDENT',
-		@error = @error output,
-        @code = @code output
-	if @error is not null
-		return
+	if not exists(select * from Flask_Learning_Management_System.dbo.[course] where id = @course_id)
+		begin
+			set @error = 'COURSE Not Found'
+			set @code = 404
+			return
+		end
 
+	if not exists(select * from Flask_Learning_Management_System.dbo.[user] where id = @student_id and role = 'STUDENT')
+		begin
+			set @error = 'Student id must be student'
+			set @code = 400
+			return
+		end
+
+	
+	
+
+	if exists(select * from Flask_Learning_Management_System.dbo.[enrollment] where student_id = @student_id and course_id = @course_id)
+		begin
+			set @error = 'Student is already enrolled'
+			set @code = 403
+			return
+		end
 
 
 	insert into Flask_Learning_Management_System.dbo.[enrollment]
@@ -3875,7 +3887,6 @@ begin
 end
 
 go
-
 create proc  Flask_Schema.get_quizzes
 @actor_id int,
 @course_id int,
@@ -3896,28 +3907,7 @@ begin
 	if @error is not null
 		return
 
-	declare 
-	@user_role varchar(10)
-		
-	select 
-		@user_role = role
-	from Flask_Learning_Management_System.dbo.[user]
-	where id = @actor_id
-	
-	if @user_role ='STUDENT'
-		begin
-			select assig.title,assig.description,iif(subm.student_id IS NOT NULL, 1, 0) as submited
-			from Flask_Learning_Management_System.dbo.[assignment] as assig
-			left join
-			Flask_Learning_Management_System.dbo.[submission_assignment] as subm
-			on @actor_id = subm.student_id and assig.course_id = @course_id
-			
-			return
-		end
-	else
-	begin
-		select * from Flask_Learning_Management_System.dbo.[assignment] where course_id = @course_id
-	end
+	select * from Flask_Learning_Management_System.dbo.[quiz] 
 end
 
 go
@@ -4758,7 +4748,6 @@ end
 
 go
 
-
 create proc  Flask_Schema.update_course_category
 @actor_id int,
 @course_id int ,
@@ -4800,7 +4789,12 @@ begin
 			set @code = 404
 			return
 		end
-
+	if @old_category != @category and  exists(select * from Flask_Learning_Management_System.dbo.[category] where course_id = @course_id and category = @category)
+		begin
+			set @error = 'Category is already existed'
+			set @code = 403
+			return
+		end
 	update Flask_Learning_Management_System.dbo.[category]
 	set 
 		category = @category
@@ -4849,6 +4843,30 @@ end
 
 
 
+go
+
+create proc  Flask_Schema.get_course_categories
+@actor_id int,
+@course_id int ,
+@error varchar(100) output,
+@code int output
+as
+begin
+	set nocount on;
+
+
+	exec Flask_Schema.check_security
+		@actor_id=@actor_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'ALL',
+		@error = @error output,
+        @code = @code output
+	if @error is not null
+		return
+
+	select category from Flask_Learning_Management_System.dbo.[category] where course_id = @course_id
+end
 
 
 
@@ -4944,7 +4962,6 @@ end
 
 go
 
-
 create proc  Flask_Schema.update_course_skill
 @actor_id int,
 @course_id int ,
@@ -4987,6 +5004,12 @@ begin
 			return
 		end
 
+	if @old_skill != @skill and  exists(select * from Flask_Learning_Management_System.dbo.[skill] where course_id = @course_id and skill = @skill)
+		begin
+			set @error = 'Skill is already existed'
+			set @code = 403
+			return
+		end
 	update Flask_Learning_Management_System.dbo.[skill]
 	set 
 		skill = @skill
@@ -5020,15 +5043,41 @@ begin
 		return
 
 
-	if not exists(select * from Flask_Learning_Management_System.dbo.[category] where course_id = @course_id and category = @skill)
+	if not exists(select * from Flask_Learning_Management_System.dbo.[skill] where course_id = @course_id and skill = @skill)
 		begin
 			set @error = 'Skill Not Found'
 			set @code = 404
 			return
 		end
 
-	delete from Flask_Learning_Management_System.dbo.[category]
-	where  course_id = @course_id and category = @skill
+	delete from Flask_Learning_Management_System.dbo.[skill]
+	where  course_id = @course_id and skill = @skill
 
 	select 'Course Skill Deleted Successfully' as message, 200 as code
+end
+
+
+go
+
+create proc  Flask_Schema.get_course_skills
+@actor_id int,
+@course_id int ,
+@error varchar(100) output,
+@code int output
+as
+begin
+	set nocount on;
+
+
+	exec Flask_Schema.check_security
+		@actor_id=@actor_id,
+		@type='COURSE',
+		@id=@course_id,
+		@target_role = 'ALL',
+		@error = @error output,
+        @code = @code output
+	if @error is not null
+		return
+
+	select skill from Flask_Learning_Management_System.dbo.[skill] where course_id = @course_id
 end
