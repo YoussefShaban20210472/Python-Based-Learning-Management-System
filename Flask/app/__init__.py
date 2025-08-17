@@ -15,6 +15,8 @@ from app.controller.questionBankController import question_bank_blueprint
 from app.controller.quizAttemptController import quiz_attempt_blueprint
 from app.controller.quizBankController import quiz_bank_blueprint
 from app.controller.quizGradeController import quiz_grade_blueprint
+from app.controller.courseCategoryController import course_category_blueprint
+from app.controller.courseSkillController import course_skill_blueprint
 from app.middleware.middleware import authenticate
 
 def create_app():
@@ -25,27 +27,30 @@ def create_app():
 
 
 
-
+    # BluePrints
     app.register_blueprint(user_blueprint,                  url_prefix='/user')
 
     app.register_blueprint(course_blueprint,                url_prefix='/course')
 
+    app.register_blueprint(course_category_blueprint,       url_prefix='/course/<int:course_id>/category')
+    app.register_blueprint(course_skill_blueprint,          url_prefix='/course/<int:course_id>/skill')
+
     app.register_blueprint(quiz_blueprint,                  url_prefix='/course/<int:course_id>/quiz')
     app.register_blueprint(quiz_attempt_blueprint,          url_prefix='/course/<int:course_id>/quiz/<int:quiz_id>/attempt')
-    app.register_blueprint(quiz_grade_blueprint,          url_prefix='/course/<int:course_id>/quiz/<int:quiz_id>')
+    app.register_blueprint(quiz_grade_blueprint,            url_prefix='/course/<int:course_id>/quiz/<int:quiz_id>')
 
     app.register_blueprint(assignment_blueprint,            url_prefix='/course/<int:course_id>/assignment')
     app.register_blueprint(assignment_submission_blueprint, url_prefix='/course/<int:course_id>/assignment/<int:assignment_id>/submission')
     app.register_blueprint(assignment_grade_blueprint,      url_prefix='/course/<int:course_id>/assignment/<int:assignment_id>/submission/')
 
-    app.register_blueprint(enrollment_blueprint,    url_prefix='/course/<int:course_id>/enrollment')
-    app.register_blueprint(lesson_blueprint,        url_prefix='/course/<int:course_id>/lesson')
-    app.register_blueprint(attendance_blueprint,    url_prefix='/course/<int:course_id>/lesson/<int:lesson_id>/attendance')
-    app.register_blueprint(media_file_blueprint,    url_prefix='/course/<int:course_id>/media_file')
-    app.register_blueprint(progress_blueprint,      url_prefix='/course/<int:course_id>/progress')
+    app.register_blueprint(enrollment_blueprint,            url_prefix='/course/<int:course_id>/enrollment')
+    app.register_blueprint(lesson_blueprint,                url_prefix='/course/<int:course_id>/lesson')
+    app.register_blueprint(attendance_blueprint,            url_prefix='/course/<int:course_id>/lesson/<int:lesson_id>/attendance')
+    app.register_blueprint(media_file_blueprint,            url_prefix='/course/<int:course_id>/media_file')
+    app.register_blueprint(progress_blueprint,              url_prefix='/course/<int:course_id>/progress')
 
-    app.register_blueprint(question_bank_blueprint,      url_prefix='/course/<int:course_id>/bank')
-    app.register_blueprint(quiz_bank_blueprint,      url_prefix='/course/<int:course_id>/bank')
+    app.register_blueprint(question_bank_blueprint,         url_prefix='/course/<int:course_id>/bank')
+    app.register_blueprint(quiz_bank_blueprint,             url_prefix='/course/<int:course_id>/bank')
 
-    app.register_blueprint(notification_blueprint,      url_prefix='/notification')
+    app.register_blueprint(notification_blueprint,          url_prefix='/notification')
     return app
