@@ -16,17 +16,18 @@ def get_all_enrollments(course_id):
 
 
 #   Get enrollment by id
-def get_enrollment_by_id(enrollment_id):
+def get_enrollment_by_id(course_id,enrollment_id):
     data= {'actor_id': getattr(request, "actor_id", None), 'enrollment_id': enrollment_id}
     return execute(inspect.currentframe().f_code.co_name, data)
 
 #   Confirm enrollment by id
-def update_enrollment_by_id(enrollment_id):
-    data= {'actor_id': getattr(request, "actor_id", None), 'enrollment_id': enrollment_id}
+def update_enrollment_by_id(course_id,enrollment_id):
+    data = request.get_json()
+    data.update({'actor_id': getattr(request, "actor_id", None), 'enrollment_id': enrollment_id})
     return execute(inspect.currentframe().f_code.co_name, data)
 
 #   Delete enrollment by id
-def delete_enrollment_by_id(enrollment_id):
+def delete_enrollment_by_id(course_id,enrollment_id):
     data= {'actor_id': getattr(request, "actor_id", None), 'enrollment_id': enrollment_id}
     return execute(inspect.currentframe().f_code.co_name, data)
 
