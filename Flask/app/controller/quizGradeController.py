@@ -18,6 +18,6 @@ quiz_grade_blueprint.route('/attempt/all/grade',methods=['GET'])(get_quizzes_att
 # Student role
 
 #   Get quiz grade by using authenticated student
-quiz_grade_blueprint.route('/attempt/grade',methods=['GET'])(get_my_quiz_attempt_grade())
+quiz_grade_blueprint.route('/attempt/grade',methods=['GET'])(get_my_quiz_attempt_grade)
 
 
