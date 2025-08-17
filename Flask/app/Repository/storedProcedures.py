@@ -95,7 +95,7 @@ stored_procedures = {
         "procedure_name": "get_enrollment",
         "params": ("actor_id", "enrollment_id"),
     },
-    "get_enrollments": {
+    "get_all_enrollments": {
         "procedure_name": "get_enrollments",
         "params": ("actor_id", "course_id"),
     },
@@ -195,7 +195,7 @@ stored_procedures = {
         "procedure_name": "get_course_media_file",
         "params": ("actor_id", "media_file_id"),
     },
-    "get_course_media_files": {
+    "get_all_course_media_files": {
         "procedure_name": "get_course_media_files",
         "params": ("actor_id", "course_id"),
     },
@@ -278,7 +278,7 @@ stored_procedures = {
         "procedure_name": "get_quiz_questions_choices",
         "params": ("actor_id", "quiz_id"),
     },
-    "get_quizzes": {
+    "get_all_quizzes": {
         "procedure_name": "get_quizzes",
         "params": ("actor_id", "course_id"),
     },
@@ -353,6 +353,10 @@ stored_procedures = {
         "procedure_name": "delete_course_category",
         "params": ("actor_id", "course_id", "category"),
     },
+    "get_all_course_categories": {
+        "procedure_name": "get_course_categories",
+        "params": ("actor_id", "course_id"),
+    },
     "add_course_skill": {
         "procedure_name": "add_course_skill",
         "params": ("actor_id", "course_id", "skill"),
@@ -364,5 +368,9 @@ stored_procedures = {
     "delete_course_skill": {
         "procedure_name": "delete_course_skill",
         "params": ("actor_id", "course_id", "skill"),
+    },
+    "get_all_course_skills": {
+        "procedure_name": "get_course_skills",
+        "params": ("actor_id", "course_id"),
     },
 }
