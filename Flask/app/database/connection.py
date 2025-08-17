@@ -48,20 +48,21 @@ def execute_query(procedure,params):
             else:
                 # Get column names
                 columns = [column[0] for column in cursor.description]
-
                 # Combine headers with rows as dicts
                 results = [dict(zip(columns, row)) for row in rows]
-                print(results)
-                print(columns)
+
                 if 'error' in columns :
+                    print(results)
                     response = results[0]['error'],results[0]['code']
                 elif 'message' in columns :
+                    print(results)
                     response = results[0]['message'],results[0]['code']
                 else:
                     response = results,200
 
     except Exception as e:
         response = str(e),500
+        print(response)
 
     cursor.commit()
     cursor.close()
